@@ -1,139 +1,200 @@
 import React, { useState } from 'react';
 import './App.css';
+import DiaryPage from './pages/DiaryPage';
+import LessonDetailPage from './pages/LessonDetailPage';
+import LessonCard from "./components/LessonCard";
+import {formatShortDate, getScheduleForDate} from "./data/scheduleData";
+import {getHomeworkForLesson} from "./data/homeworkData";
 
-// Тестові дані уроків
-const lessonsData = [
-  {
-    id: 1,
-    subject: "Історія України",
-    type: "Переглянути матеріал",
-    grade: "12"
-  },
-  {
-    id: 2,
-    subject: "Англійська мова",
-    type: "Виконати тестування",
-    grade: "12"
-  },
-  {
-    id: 3,
-    subject: "Алгебра",
-    type: "Контрольна робота",
-    grade: "12"
-  },
-  {
-    id: 4,
-    subject: "Біологія",
-    type: "Перевглянути матеріал до уроку",
-    grade: "12"
-  },
-  {
-    id: 5,
-    subject: "Фізика",
-    type: "Лекція, перевглянути матеріал",
-    grade: "12"
-  },
-  {
-    id: 6,
-    subject: "Географія",
-    type: "Завдання",
-    grade: "12"
-  },
-  {
-    id: 7,
-    subject: "Українська література",
-    type: "Твір",
-    grade: "12"
-  },
-  {
-    id: 8,
-    subject: "Фізична культура",
-    type: "Завдання",
-    grade: "12"
-  }
-];
+function HeaderContent({ title }) {
+    return (
+        <div className="header-content">
+            <span className="material-symbols-outlined icon">menu</span>
+            <h1 className="header-title">{title}</h1>
+            <img src={"images/header/profile.svg"} alt="profileIcon" className="icon"/>
+        </div>
+    );
+}
+
+const currentDate = new Date(/*"2025-11-03"*/);
+const schedule = getScheduleForDate(currentDate);
+
+// Компонент головної сторінки
+function HomePage({ onLessonClick }) {
+    return (
+        <>
+            <div className="page-title">
+                <h2>Розклад на сьогодні</h2>
+            </div>
+
+            <div className="lessons-list">
+                {
+                    schedule.length === 0 ? (
+                        <div className="no-lessons">
+                            <span className="material-symbols-outlined">event_busy</span>
+                            <p>Вихідний день</p>
+                            <p className="no-lessons-subtitle">Насолоджуйся відпочинком! 🎉</p>
+                        </div>
+                    ) : (
+                        schedule.map((lesson) => {
+                            const dateString = formatShortDate(currentDate);
+                            const homework = getHomeworkForLesson(lesson.id, dateString);
+                            return (
+                                <LessonCard
+                                    key={lesson.id}
+                                    lessonNumber={lesson.lessonNumber}
+                                    subject={lesson.subject}
+                                    time={lesson.time}
+                                    room={lesson.room}
+                                    homework={homework}
+                                    showDetails={false}
+                                    onClick={() => onLessonClick && onLessonClick(lesson, homework, dateString, 'home')}
+                                />
+                            );}))
+                }
+            </div>
+
+            <div className="news-section">
+                <h3 className="news-title">Стрічка новин</h3>
+                <div className="news-placeholder">
+                    <p>Тут будуть оголошення</p>
+                </div>
+            </div>
+        </>
+    );
+}
 
 function App() {
     const [activeTab, setActiveTab] = useState('home');
+    const [selectedLesson, setSelectedLesson] = useState(null);
+    const [previousContext, setPreviousContext] = useState(null);
+    const [diaryDate, setDiaryDate] = useState(null); // Дата для щоденника
+
+    const getHeaderTitle = () => {
+        if (selectedLesson) return selectedLesson.subject;
+
+        switch(activeTab) {
+            case 'home': return 'Головна';
+            case 'diary': return 'Щоденник';
+            case 'grades': return 'Успішність';
+            default: return 'Головна';
+        }
+    };
+
+    // Обробник кліка на урок
+    const handleLessonClick = (lesson, homework, date, source) => {
+        console.log('Клік на урок:', lesson, homework, date, 'з:', source);
+
+        // Зберігаємо контекст звідки відкрили урок
+        setPreviousContext({
+            source: source, // 'home' або 'diary'
+            date: date,     // дата уроку
+            tab: activeTab  // поточна вкладка
+        });
+
+        setSelectedLesson({ ...lesson, homework, date });
+    };
+
+    // Обробник повернення назад
+    const handleBackFromLesson = () => {
+        if (previousContext) {
+            // Якщо відкрили з головної - повертаємось на головну
+            if (previousContext.source === 'home') {
+                setActiveTab('home');
+                setDiaryDate(null);
+            }
+            // Якщо відкрили зі щоденника - повертаємось в щоденник на ту саму дату
+            else if (previousContext.source === 'diary') {
+                setActiveTab('diary');
+                // Встановлюємо дату з якої відкрили урок
+                setDiaryDate(new Date(previousContext.date));
+            }
+        }
+
+        setSelectedLesson(null);
+        setPreviousContext(null);
+    };
+
+    const renderContent = () => {
+        // Якщо вибраний урок - показуємо його деталі
+        if (selectedLesson) {
+            return (
+                <LessonDetailPage
+                    lesson={selectedLesson}
+                    homework={selectedLesson.homework}
+                    date={selectedLesson.date}
+                    onBack={handleBackFromLesson}
+                />
+            );
+        }
+
+        // Інакше показуємо звичайні сторінки
+        switch(activeTab) {
+            case 'home':
+                return <HomePage onLessonClick={handleLessonClick} />;
+            case 'diary':
+                return <DiaryPage onLessonClick={handleLessonClick} initialDate={diaryDate} />;
+            case 'grades':
+                return <div className="page-title"><h2>Сторінка успішності (скоро)</h2></div>;
+            default:
+                return <HomePage onLessonClick={handleLessonClick} />;
+        }
+    };
+
     return (
         <div className="app">
-            {/* Header */}
             <header className="header">
-                <div className="header-content">
-                    <img src={"images/header/menu.svg"} alt="menuIcon" className="icon"/>
-                    <h1 className="header-title">Головна</h1>
-                    <img src={"images/header/profile.svg"} alt="profileIcon" className="icon"/>
-                </div>
+                <HeaderContent title={getHeaderTitle()} />
             </header>
 
-            {/* Main Content */}
             <main className="main-content">
-                <div className="page-title">
-                  <h2>Розклад на сьогодні</h2>
-                </div>
+                {renderContent()}
+            </main>
 
-                {/* Lessons List */}
-                <div className="lessons-list">
-                    {lessonsData.map((lesson, index) => (
-                        <div key={lesson.id} className="lesson-card">
-                            <div className="lesson-content">
-                                <div className="lesson-info">
-                                    <span className="lesson-number">{index + 1}.</span>
-                                    <div>
-                                        <h3 className="lesson-subject">{lesson.subject}</h3>
-                                        <p className="lesson-type">{lesson.type}</p>
-                                    </div>
-                                </div>
-                                <div className="lesson-meta">
-                                    <div className="lesson-grade">{lesson.grade}/12</div>
-                                    <div className="grade-label">Оцінка</div>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* News Section */}
-                <div className="news-section">
-                    <h3 className="news-title">Стрічка новин</h3>
-                    <div className="news-placeholder">
-                        <p>Тут будуть оголошення</p>
-                    </div>
-                </div>
-            </  main>
-
-            {/* Bottom Navigation */}
             <nav className="bottom-nav">
+                <HeaderContent title={getHeaderTitle()} />
                 <div className="nav-content">
                     <button
-                        onClick={() => setActiveTab('home')}
-                        className={`nav-button ${activeTab === 'home' ? 'active' : ''}`}
+                        onClick={() => {
+                            setActiveTab('home');
+                            setSelectedLesson(null);
+                            setPreviousContext(null);
+                            setDiaryDate(null);
+                        }}
+                        className={`nav-button ${activeTab === 'home' && !selectedLesson ? 'active' : ''}`}
                     >
                         <div className={"button-icon-wrapper"}>
-                            <img src={`images/bottom-navbar/${activeTab === 'home' ? 'active' : 'inactive'}/home.svg`}
-                                 alt={"mainPage"} className="nav-icon"/>
+                            <span className="material-symbols-outlined nav-icon">home</span>
                         </div>
                         <span>Головна</span>
                     </button>
 
                     <button
-                        onClick={() => setActiveTab('diary')}
-                        className={`nav-button ${activeTab === 'diary' ? 'active' : ''}`}
+                        onClick={() => {
+                            setActiveTab('diary');
+                            setSelectedLesson(null);
+                            setPreviousContext(null);
+                            setDiaryDate(null);
+                        }}
+                        className={`nav-button ${activeTab === 'diary' && !selectedLesson ? 'active' : ''}`}
                     >
                         <div className={"button-icon-wrapper"}>
-                            <img src={`images/bottom-navbar/${activeTab === 'diary' ? 'active' : 'inactive'}/diary.svg`}
-                                 alt={"diaryIcon"} className="nav-icon"/>
+                            <span className="material-symbols-outlined nav-icon">today</span>
                         </div>
                         <span>Щоденник</span>
                     </button>
 
                     <button
-                        onClick={() => setActiveTab('grades')}
-                        className={`nav-button ${activeTab === 'grades' ? 'active' : ''}`}
+                        onClick={() => {
+                            setActiveTab('grades');
+                            setSelectedLesson(null);
+                            setPreviousContext(null);
+                            setDiaryDate(null);
+                        }}
+                        className={`nav-button ${activeTab === 'grades' && !selectedLesson ? 'active' : ''}`}
                     >
                         <div className={"button-icon-wrapper"}>
-                            <img src={`images/bottom-navbar/${activeTab === 'grades' ? 'active' : 'inactive'}/grades.svg`}
-                                 alt={"gradesIcon"} className="nav-icon" />
+                            <span className="material-symbols-outlined nav-icon">award_star</span>
                         </div>
                         <span>Успішність</span>
                     </button>
