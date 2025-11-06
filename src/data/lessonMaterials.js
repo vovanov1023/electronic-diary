@@ -2,7 +2,7 @@
 
 export const lessonMaterials = {
     // Алгебра, понеділок, пара 2 (уроки 3-4)
-    "3": {
+    "3:2025-11-03": {
         topic: "Логарифмічні рівняння",
         description: "Продовжуємо вивчати логарифмічні рівняння. Розглянемо складніші випадки та методи розв'язання.",
         materials: [
@@ -28,28 +28,10 @@ export const lessonMaterials = {
                 icon: "play_circle"
             }
         ],
-        grades: [
-            {
-                id: 1,
-                type: "Контрольна робота",
-                grade: 11,
-                maxGrade: 12,
-                date: "2025-10-28",
-                comment: "Добре, але є помилки в останній задачі"
-            },
-            {
-                id: 2,
-                type: "Домашнє завдання",
-                grade: 12,
-                maxGrade: 12,
-                date: "2025-10-25",
-                comment: "Відмінна робота!"
-            }
-        ]
     },
 
     // Українська мова, вівторок, пара 3 (уроки 5-6)
-    "5": {
+    "5:2025-11-04": {
         topic: "Складнопідрядні речення",
         description: "Вивчаємо види складнопідрядних речень, їх ознаки та правила пунктуації.",
         materials: [
@@ -67,21 +49,11 @@ export const lessonMaterials = {
                 url: "#",
                 icon: "description"
             }
-        ],
-        grades: [
-            {
-                id: 1,
-                type: "Самостійна робота",
-                grade: 10,
-                maxGrade: 12,
-                date: "2025-10-30",
-                comment: "Добре, але потрібно більше уваги до розділових знаків"
-            }
         ]
     },
 
     // Англійська мова, понеділок, пара 1 (уроки 1-2)
-    "1": {
+    "1:2025-11-03": {
         topic: "Unit 5: Artificial Intelligence",
         description: "Discussing the impact of AI on modern society. Vocabulary and grammar practice.",
         materials: [
@@ -106,25 +78,24 @@ export const lessonMaterials = {
                 url: "https://example.com/grammar",
                 icon: "link"
             }
-        ],
-        grades: []
+        ]
     }
 };
 
 // Отримати матеріали для конкретного уроку
-export const getMaterialsForLesson = (lessonId) => {
-    return lessonMaterials[lessonId] || null;
+export const getMaterialsForLesson = (lessonId, date) => {
+    return lessonMaterials[lessonId+":"+date] || null;
 };
 
 // Коментарі (для прикладу)
 export const lessonComments = {
-    "3": [
+    "3:2025-11-03": [
         {
             id: 1,
             author: "Іваненко О.М.",
             role: "teacher",
             text: "Не забудьте здати домашнє завдання до кінця тижня!",
-            date: "2025-11-02T10:30:00",
+            date: "2025-11-03T10:30:00",
             avatar: null
         },
         {
@@ -132,13 +103,13 @@ export const lessonComments = {
             author: "Петренко М.",
             role: "student",
             text: "Добрий день! Чи можна використовувати калькулятор на контрольній?",
-            date: "2025-11-02T14:20:00",
+            date: "2025-11-03T14:20:00",
             avatar: null
         }
     ]
 };
 
 // Отримати коментарі для уроку
-export const getCommentsForLesson = (lessonId) => {
-    return lessonComments[lessonId] || [];
+export const getCommentsForLesson = (lessonId, date) => {
+    return lessonComments[lessonId+":"+date] || [];
 };

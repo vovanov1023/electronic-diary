@@ -40,18 +40,3 @@ export const getHomeworkForLesson = (lessonId, date) => {
 export const getIncompleteHomeworkCount = (date) => {
     return homeworkData.filter(hw => hw.date === date && !hw.completed).length;
 };
-
-// Іконки для типів завдань
-export const taskTypeIcons = {
-    reading: '📖',
-    writing: '✍️',
-    test: '📝',
-    project: '🎨'
-};
-
-export const taskTypeLabels = {
-    reading: 'Читання',
-    writing: 'Письмово',
-    test: 'Тест/Контрольна',
-    project: 'Проект'
-};

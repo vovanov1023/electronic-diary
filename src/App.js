@@ -5,6 +5,8 @@ import LessonDetailPage from './pages/LessonDetailPage';
 import LessonCard from "./components/LessonCard";
 import {formatShortDate, getScheduleForDate} from "./data/scheduleData";
 import {getHomeworkForLesson} from "./data/homeworkData";
+import GradesPage from "./pages/GradesPage";
+import SubjectDetailPage from './pages/SubjectDetailPage';
 
 function HeaderContent({ title }) {
     return (
@@ -68,9 +70,11 @@ function App() {
     const [activeTab, setActiveTab] = useState('home');
     const [selectedLesson, setSelectedLesson] = useState(null);
     const [previousContext, setPreviousContext] = useState(null);
-    const [diaryDate, setDiaryDate] = useState(null); // Дата для щоденника
+    const [diaryDate, setDiaryDate] = useState(null);
+    const [selectedSubject, setSelectedSubject] = useState(null);
 
     const getHeaderTitle = () => {
+        if (selectedSubject) return selectedSubject.subject;
         if (selectedLesson) return selectedLesson.subject;
 
         switch(activeTab) {
@@ -115,8 +119,31 @@ function App() {
         setPreviousContext(null);
     };
 
+    const handleSubjectClick = (subjectData) => {
+        console.log('Клік на предмет:', subjectData);
+        setSelectedSubject(subjectData);
+        // Також скидаємо урок, якщо він був відкритий (про всяк випадок)
+        setSelectedLesson(null);
+    };
+
+    const handleBackFromSubject = () => {
+        setSelectedSubject(null);
+        // Переконуємось, що ми на вкладці "Успішність"
+        setActiveTab('grades');
+    };
+
     const renderContent = () => {
-        // Якщо вибраний урок - показуємо його деталі
+        // 1. Якщо вибраний ПРЕДМЕТ - показуємо його деталі
+        if (selectedSubject) {
+            return (
+                <SubjectDetailPage
+                    subjectData={selectedSubject}
+                    onBack={handleBackFromSubject}
+                />
+            );
+        }
+
+        // 2. Якщо вибраний УРОК - показуємо його деталі
         if (selectedLesson) {
             return (
                 <LessonDetailPage
@@ -128,14 +155,15 @@ function App() {
             );
         }
 
-        // Інакше показуємо звичайні сторінки
+        // 3. Інакше показуємо звичайні сторінки
         switch(activeTab) {
             case 'home':
                 return <HomePage onLessonClick={handleLessonClick} />;
             case 'diary':
                 return <DiaryPage onLessonClick={handleLessonClick} initialDate={diaryDate} />;
             case 'grades':
-                return <div className="page-title"><h2>Сторінка успішності (скоро)</h2></div>;
+                // Передаємо новий обробник кліка в GradesPage
+                return <GradesPage onSubjectClick={handleSubjectClick} />;
             default:
                 return <HomePage onLessonClick={handleLessonClick} />;
         }
@@ -158,6 +186,7 @@ function App() {
                         onClick={() => {
                             setActiveTab('home');
                             setSelectedLesson(null);
+                            setSelectedSubject(null);
                             setPreviousContext(null);
                             setDiaryDate(null);
                         }}

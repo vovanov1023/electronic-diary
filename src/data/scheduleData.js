@@ -51,8 +51,8 @@ const baseSchedule = {
         { id: "2", subject: "Алгебра", room: "106", weekType: WEEK_TYPES.ALL },
         { id: "3", subject: "Інформатика", room: "101", weekType: WEEK_TYPES.ALL },
         { id: "4", subject: "Технології", room: "101", weekType: WEEK_TYPES.ALL },
-        { id: "5", subject: "Англ. мова", room: "202", weekType: WEEK_TYPES.ALL },
-        { id: "6", subject: "Англ. мова", room: "202", weekType: WEEK_TYPES.ALL },
+        { id: "5", subject: "Англійська мова", room: "202", weekType: WEEK_TYPES.ALL },
+        { id: "6", subject: "Англійська мова", room: "202", weekType: WEEK_TYPES.ALL },
         { id: "7", subject: "Захист України", room: "204", weekType: WEEK_TYPES.ALL },
         { id: "8", subject: "Захист України", room: "204", weekType: WEEK_TYPES.ALL }
     ],
@@ -94,9 +94,7 @@ const baseSchedule = {
 
 // Функція для визначення парності тижня
 export const getWeekType = (date) => {
-    const startOfYear = new Date(date.getFullYear(), 0, 1);
-    const days = Math.floor((date - startOfYear) / (24 * 60 * 60 * 1000));
-    const weekNumber = Math.ceil((days + startOfYear.getDay() + 1) / 7);
+    const weekNumber = getWeekOfMonth(date);
     return weekNumber % 2 === 0 ? 'even' : 'odd';
 };
 
@@ -135,8 +133,6 @@ const matchesWeekType = (weekTypeRule, date) => {
 // Отримання розкладу на конкретний день
 export const getScheduleForDate = (date) => {
     const dayOfWeek = date.getDay();
-
-    // Вихідні - немає розкладу
     if (dayOfWeek === 0 || dayOfWeek === 6) {
         return [];
     }
@@ -144,15 +140,29 @@ export const getScheduleForDate = (date) => {
     const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const dayName = dayNames[dayOfWeek];
 
-    let schedule = baseSchedule[dayName] || [];
+    const allLessonsForDay = baseSchedule[dayName] || [];
+    const finalSchedule = [];
 
-    // Фільтруємо уроки відповідно до типу тижня
-    schedule = schedule.filter(lesson => matchesWeekType(lesson.weekType, date));
-    return schedule.map((lesson, index) => ({
-        ...lesson,
-        lessonNumber: index + 1,
-        time: `${bellSchedule[index].start} - ${bellSchedule[index].end}`
-    }));
+    bellSchedule.forEach((bellTime, index) => {
+        const lessonNumber = index + 1;
+
+        const lessonForSlot = allLessonsForDay.find(lesson => {
+            const isForSlot = lesson.id.startsWith(lessonNumber.toString()) ||
+                lesson.id.startsWith(`${lessonNumber}_`);
+
+            return isForSlot && matchesWeekType(lesson.weekType, date);
+        });
+
+        if (lessonForSlot) {
+            finalSchedule.push({
+                ...lessonForSlot,
+                lessonNumber: lessonNumber,
+                time: `${bellTime.start} - ${bellTime.end}`
+            });
+        }
+    });
+
+    return finalSchedule;
 };
 
 // Форматування дати

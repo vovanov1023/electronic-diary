@@ -1,15 +1,17 @@
 // src/pages/LessonDetailPage.jsx
 import React, { useState } from 'react';
 import './LessonDetailPage.css';
-import { getMaterialsForLesson, getCommentsForLesson } from '../data/lessonMaterials';
+import {getMaterialsForLesson, getCommentsForLesson} from '../data/lessonMaterials';
+import {getGradesForLesson} from "../data/gradesData";
 
-function LessonDetailPage({ lesson, homework, onBack }) {
+function LessonDetailPage({ lesson, homework, date, onBack }) {
     const [homeworkText, setHomeworkText] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [newComment, setNewComment] = useState('');
 
-    const materials = getMaterialsForLesson(lesson.id);
-    const comments = getCommentsForLesson(lesson.id);
+    const materials = getMaterialsForLesson(lesson.id, date);
+    const comments = getCommentsForLesson(lesson.id, date);
+    const grades = getGradesForLesson(lesson.subject);
 
     // Іконки для типів матеріалів
     const getIconForType = (type) => {
@@ -166,14 +168,15 @@ function LessonDetailPage({ lesson, homework, onBack }) {
                 )}
 
                 {/* Оцінки */}
-                {materials && materials.grades.length > 0 && (
+                {
+                    grades.length > 0 && (
                     <section className="detail-section">
                         <h2 className="section-title">
                             <span className="material-symbols-outlined">grade</span>
                             Оцінки
                         </h2>
                         <div className="grades-list">
-                            {materials.grades.map((grade) => (
+                            {grades.map((grade) => (
                                 <div key={grade.id} className="grade-item">
                                     <div className="grade-info">
                                         <div className="grade-type">{grade.type}</div>
@@ -182,7 +185,7 @@ function LessonDetailPage({ lesson, homework, onBack }) {
                                         </div>
                                     </div>
                                     <div className="grade-value-large">
-                                        {grade.grade}/{grade.maxGrade}
+                                        {grade.grade}/{grade.max}
                                     </div>
                                     {grade.comment && (
                                         <div className="grade-comment">
