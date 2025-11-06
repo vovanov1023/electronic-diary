@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/electronic-diary/static/css/main.bb717ccb.css",
+    "main.js": "/electronic-diary/static/js/main.012d9897.js",
+    "static/js/453.50298fb7.chunk.js": "/electronic-diary/static/js/453.50298fb7.chunk.js",
+    "index.html": "/electronic-diary/index.html",
+    "main.bb717ccb.css.map": "/electronic-diary/static/css/main.bb717ccb.css.map",
+    "main.012d9897.js.map": "/electronic-diary/static/js/main.012d9897.js.map",
+    "453.50298fb7.chunk.js.map": "/electronic-diary/static/js/453.50298fb7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bb717ccb.css",
+    "static/js/main.012d9897.js"
+  ]
+}
