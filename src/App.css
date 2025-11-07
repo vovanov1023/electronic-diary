@@ -219,12 +219,24 @@
     display: block;
 }
 
+.dashboard-widgets {
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* Мобілки - один під одним */
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
 /* Responsive - Планшети */
 @media (min-width: 768px) {
     .main-content,
     .header-content,
     .nav-content {
         max-width: 768px;
+    }
+
+    .dashboard-widgets {
+        flex-direction: row;
     }
 
     .lessons-list {

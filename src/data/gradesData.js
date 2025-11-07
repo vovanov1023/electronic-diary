@@ -10,16 +10,15 @@ export const calculateAverage = (grades) => {
 };
 
 export const gradesData = {
-    // Кожен ключ - унікальний ID предмету (можна використовувати subject.toLowerCase())
     "algebra": {
         subject: "Алгебра",
         teacher: "Іваненко О.М.",
         semester1: [
-            { id: 1, type: "СР", grade: 10, max: 12, date: "2025-09-15" },
-            { id: 2, type: "ДЗ", grade: 11, max: 12, date: "2025-09-20" },
-            { id: 3, type: "КР", grade: 9, max: 12, date: "2025-10-01" },
-            { id: 4, type: "Відповідь", grade: 12, max: 12, date: "2025-10-05" },
-            { id: 5, type: "СР", grade: 10, max: 12, date: "2025-10-15" },
+            { id: 1, type: "СР", grade: 10, max: 12, date: "2025-11-04", lessonId: "7" }
+        ],
+        semester1_absences: [
+            { id: 'a1', date: '2025-09-18', },
+            { id: 'a2', date: '2025-10-03', comment: 'Був у лікаря' }
         ],
         semester1_final: 10,
         semester2: [],
@@ -30,10 +29,9 @@ export const gradesData = {
         subject: "Українська мова",
         teacher: "Петренко Г.В.",
         semester1: [
-            { id: 6, type: "Диктант", grade: 8, max: 12, date: "2025-09-17", comment: "" },
-            { id: 7, type: "Твір", grade: 10, max: 12, date: "2025-09-25", comment: "" },
-            { id: 8, type: "СР", grade: 9, max: 12, date: "2025-10-10", comment: "" },
+            { id: 6, type: "Диктант", grade: 8, max: 12, date: "2025-11-04", comment: "", lessonId: "5" }
         ],
+        semester1_absences: [],
         semester1_final: 9,
         semester2: [],
         semester2_final: null,
@@ -43,10 +41,9 @@ export const gradesData = {
         subject: "Фізика",
         teacher: "Бойко В.І.",
         semester1: [
-            { id: 9, type: "ЛР", grade: 11, max: 12, date: "2025-09-22", comment: "" },
-            { id: 10, type: "СР", grade: 10, max: 12, date: "2025-10-03", comment: "можна було потужніше" },
-            { id: 11, type: "КР", grade: 11, max: 12, date: "2025-10-20", comment: "" },
+            { id: 9, type: "ЛР", grade: 11, max: 12, date: "2025-11-03", comment: "", lessonId: "5" }
         ],
+        semester1_absences: [],
         semester1_final: 11,
         semester2: [],
         semester2_final: null,
@@ -56,10 +53,9 @@ export const gradesData = {
         subject: "Англійська мова",
         teacher: "Ковальчук М.С.",
         semester1: [
-            { id: 12, type: "Speaking", grade: 12, max: 12, date: "2025-09-18", comment: ""},
-            { id: 13, type: "Writing", grade: 10, max: 12, date: "2025-09-28", comment: "" },
-            { id: 14, type: "Test", grade: 11, max: 12, date: "2025-10-12", comment: "вельми потужно" },
+            { id: 12, type: "Speaking", grade: 12, max: 12, date: "2025-11-03", comment: "", lessonId: "1"}
         ],
+        semester1_absences: [],
         semester1_final: 11,
         semester2: [],
         semester2_final: null,
@@ -69,10 +65,9 @@ export const gradesData = {
         subject: "Історія України",
         teacher: "Шевченко Т.П.",
         semester1: [
-            { id: 15, type: "Відповідь", grade: 9, max: 12, date: "2025-09-16", comment: "" },
-            { id: 16, type: "Тест", grade: 10, max: 12, date: "2025-09-30", comment: "" },
-            { id: 17, type: "Контурні к.", grade: 8, max: 12, date: "2025-10-14", comment: "терпимо" },
+            { id: 15, type: "Відповідь", grade: 1, max: 12, date: "2025-09-16", comment: "", lessonId: "7" }
         ],
+        semester1_absences: [],
         semester1_final: 9,
         semester2: [],
         semester2_final: null,
@@ -93,8 +88,37 @@ export function getGradesForLesson(subjectName) {
 export const getAllGrades = () => {
     // Одразу розраховуємо середній бал для кожного предмету
     const subjects = Object.values(gradesData);
-    return subjects.map(subject => ({
-        ...subject,
-        average: calculateAverage(subject.semester1) // Поки що рахуємо лише за 1 семестр
-    }));
+    return subjects.map(
+        subject => (
+            {
+                ...subject,
+                average: calculateAverage(subject.semester1), // Поки що рахуємо лише за 1 семестр
+                absenceCount: subject.semester1_absences ? subject.semester1_absences.length : 0
+            }
+        )
+    );
+};
+
+export const getGradeForLessonByDate = (subjectName, dateString) => {
+    const grades = getGradesForLesson(subjectName);
+    if (!grades) return null;
+    return grades.find(grade => grade.date === dateString) || null;
+};
+
+export const getRecentGrades = (limit = 3) => {
+    const allGrades = [];
+
+    for (const subjectKey in gradesData) {
+        const subject = gradesData[subjectKey];
+
+        subject.semester1.forEach(grade => {
+            allGrades.push({
+                ...grade,
+                subject: subject.subject
+            });
+        });
+    }
+
+    allGrades.sort((a, b) => new Date(b.date) - new Date(a.date));
+    return allGrades.slice(0, limit);
 };

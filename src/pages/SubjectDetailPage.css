@@ -111,3 +111,68 @@
     text-align: center;
     padding: 20px;
 }
+
+.full-absences-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.full-absence-item {
+    background: white;
+    border: 1px solid var(--on-surface-variant-lighter);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.full-absence-main {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.full-absence-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.full-absence-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.full-absence-type {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--on-surface);
+}
+
+.full-absence-date {
+    font-size: 13px;
+    color: var(--on-surface-variant);
+}
+
+.full-absence-comment {
+    margin-top: 12px;
+    padding: 12px;
+    background: var(--secondary-container);
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--on-surface-variant);
+}
+
+.full-absence-comment .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--primary);
+}

@@ -1,6 +1,5 @@
 // src/data/scheduleData.js
 
-// Час дзвінків (пари по 2 уроки)
 export const bellSchedule = [
     { start: "08:50", end: "09:35" },
     { start: "09:40", end: "10:25" },
@@ -12,122 +11,55 @@ export const bellSchedule = [
     { start: "15:15", end: "16:00" }
 ];
 
-// Типи тижнів для розкладу
-const WEEK_TYPES = {
-    ALL: 'all',           // Кожен тиждень
-    ODD: '1t',            // Непарні тижні (1т)
-    EVEN: '2t',           // Парні тижні (2т)
-    EVEN_HALF: '2/4t',    // Кожен другий парний (2/4т)
-    ODD_HALF: '3/4t',     // Кожен другий непарний (3/4т)
-    FIRST_ODD: '1/4t',    // Кожен перший непарний (1/4т)
-    FOURTH: '4/4t'        // Кожен четвертий тиждень (4/4т)
-};
-
 const baseSchedule = {
     monday: [
-        { id: "1", subject: "Англійська мова", room: "107", weekType: WEEK_TYPES.ALL },
-        { id: "2", subject: "Англійська мова", room: "107", weekType: WEEK_TYPES.ALL },
-        { id: "3", subject: "Алгебра", room: "106", weekType: WEEK_TYPES.ALL },
-        { id: "4", subject: "Алгебра", room: "106", weekType: WEEK_TYPES.ALL },
-        { id: "5_odd", subject: "Фізика", room: "102", weekType: WEEK_TYPES.ODD },
-        { id: "6_odd", subject: "Фізика", room: "102", weekType: WEEK_TYPES.ODD},
-        { id: "5_even", subject: "Українська література", room: "102", weekType: WEEK_TYPES.EVEN },
-        { id: "6_even", subject: "Українська література", room: "102", weekType: WEEK_TYPES.EVEN }
+        { id: "1", subject: "Англійська мова", room: "107", teacher: "Ковальчук М.С." },
+        { id: "2", subject: "Англійська мова", room: "107", teacher: "Ковальчук М.С." },
+        { id: "3", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
+        { id: "4", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
+        { id: "5", subject: "Фізика", room: "102", teacher: "Бойко В.І." },
+        { id: "6", subject: "Фізика", room: "102", teacher: "Бойко В.І." }
     ],
     tuesday: [
-        { id: "1", subject: "Фізична культура", room: "Спортзал", weekType: WEEK_TYPES.ALL },
-        { id: "2", subject: "Фізична культура", room: "Спортзал", weekType: WEEK_TYPES.ALL },
-        { id: "3", subject: "Геометрія", room: "106", weekType: WEEK_TYPES.ALL },
-        { id: "4", subject: "Геометрія", room: "106", weekType: WEEK_TYPES.ALL },
-        { id: "5", subject: "Українська мова", room: "202", weekType: WEEK_TYPES.ALL },
-        { id: "6", subject: "Українська мова", room: "202", weekType: WEEK_TYPES.ALL },
-        { id: "7_odd", subject: "Алгебра", room: "106", weekType: WEEK_TYPES.ODD },
-        { id: "8_odd", subject: "Алгебра", room: "106", weekType: WEEK_TYPES.ODD },
-        { id: "7_even", subject: "Фізика", room: "102", weekType: WEEK_TYPES.EVEN },
-        { id: "8_even", subject: "Фізика", room: "102", weekType: WEEK_TYPES.EVEN }
+        { id: "1", subject: "Фізична культура", room: "Спортзал", teacher: "Мельник С.А." },
+        { id: "2", subject: "Фізична культура", room: "Спортзал", teacher: "Мельник С.А." },
+        { id: "3", subject: "Геометрія", room: "106", teacher: "Іваненко О.М." },
+        { id: "4", subject: "Геометрія", room: "106", teacher: "Іваненко О.М." },
+        { id: "5", subject: "Українська мова", room: "202", teacher: "Петренко Г.В." },
+        { id: "6", subject: "Українська мова", room: "202", teacher: "Петренко Г.В." },
+        { id: "7", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
+        { id: "8", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." }
     ],
     wednesday: [
-        { id: "1", subject: "Алгебра", room: "106", weekType: WEEK_TYPES.ALL },
-        { id: "2", subject: "Алгебра", room: "106", weekType: WEEK_TYPES.ALL },
-        { id: "3", subject: "Інформатика", room: "101", weekType: WEEK_TYPES.ALL },
-        { id: "4", subject: "Технології", room: "101", weekType: WEEK_TYPES.ALL },
-        { id: "5", subject: "Англійська мова", room: "202", weekType: WEEK_TYPES.ALL },
-        { id: "6", subject: "Англійська мова", room: "202", weekType: WEEK_TYPES.ALL },
-        { id: "7", subject: "Захист України", room: "204", weekType: WEEK_TYPES.ALL },
-        { id: "8", subject: "Захист України", room: "204", weekType: WEEK_TYPES.ALL }
+        { id: "1", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
+        { id: "2", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
+        { id: "3", subject: "Інформатика", room: "101", teacher: "Комаров І.Ю." },
+        { id: "4", subject: "Технології", room: "101", teacher: "Комаров І.Ю." },
+        { id: "5", subject: "Англійська мова", room: "202", teacher: "Ковальчук М.С." },
+        { id: "6", subject: "Англійська мова", room: "202", teacher: "Ковальчук М.С." },
+        { id: "7", subject: "Захист України", room: "204", teacher: "Семенов С.С." },
+        { id: "8", subject: "Захист України", room: "204", teacher: "Семенов С.С." }
     ],
     thursday: [
-        { id: "1_odd", subject: "Хімія", room: null, weekType: WEEK_TYPES.ODD },
-        { id: "2_odd", subject: "Хімія", room: null, weekType: WEEK_TYPES.ODD },
-        { id: "1_even", subject: "Біологія", room: null, weekType: WEEK_TYPES.EVEN },
-        { id: "2_even", subject: "Біологія", room: null, weekType: WEEK_TYPES.EVEN },
-        { id: "3_odd", subject: "Географія", room: null, weekType: WEEK_TYPES.ODD },
-        { id: "4_odd", subject: "Географія", room: null, weekType: WEEK_TYPES.ODD },
-        { id: "3_even", subject: "Астрономія", room: null, weekType: WEEK_TYPES.EVEN },
-        { id: "4_even", subject: "Астрономія", room: null, weekType: WEEK_TYPES.EVEN },
-        { id: "5_odd", subject: "Всесвітня історія", room: null, weekType: WEEK_TYPES.ODD },
-        { id: "6_odd", subject: "Всесвітня історія", room: null, weekType: WEEK_TYPES.ODD },
-        { id: "5_even", subject: "Зарубіжна література", room: null, weekType: WEEK_TYPES.EVEN },
-        { id: "6_even", subject: "Зарубіжна література", room: null, weekType: WEEK_TYPES.EVEN },
-        { id: "7_first_odd", subject: "Біологія", room: null, weekType: WEEK_TYPES.FIRST_ODD },
-        { id: "8_first_odd", subject: "Біологія", room: null, weekType: WEEK_TYPES.FIRST_ODD },
-        { id: "7_odd_half", subject: "Хімія", room: null, weekType: WEEK_TYPES.ODD_HALF },
-        { id: "8_odd_half", subject: "Хімія", room: null, weekType: WEEK_TYPES.ODD_HALF },
-        { id: "7_fourth", subject: "Інформатика", room: null, weekType: WEEK_TYPES.FOURTH },
-        { id: "8_fourth", subject: "Інформатика", room: null, weekType: WEEK_TYPES.FOURTH }
+        { id: "1", subject: "Хімія", room: null, teacher: "Малая Н.О." },
+        { id: "2", subject: "Хімія", room: null, teacher: "Малая Н.О." },
+        { id: "3", subject: "Географія", room: null, teacher: "Рибачик Н.О." },
+        { id: "4", subject: "Географія", room: null, teacher: "Рибачик Н.О." },
+        { id: "5", subject: "Всесвітня історія", room: null, teacher: "Симоненко С.В." },
+        { id: "6", subject: "Всесвітня історія", room: null, teacher: "Симоненко С.В." },
+        { id: "7", subject: "Біологія", room: null, teacher: "Корнова Т.В." },
+        { id: "8", subject: "Біологія", room: null, teacher: "Корнова Т.В." },
     ],
     friday: [
-        { id: "1_odd", subject: "Історія України", room: "104", weekType: WEEK_TYPES.ODD },
-        { id: "2_odd", subject: "Історія України", room: "104", weekType: WEEK_TYPES.ODD },
-        { id: "1_even", subject: "Геометрія", room: "106", weekType: WEEK_TYPES.EVEN },
-        { id: "2_even", subject: "Геометрія", room: "106", weekType: WEEK_TYPES.EVEN },
-        { id: "3_even", subject: "Фізика", room: "102", weekType: WEEK_TYPES.EVEN },
-        { id: "4_even", subject: "Фізика", room: "102", weekType: WEEK_TYPES.EVEN },
-        { id: "3_odd", subject: "Українська література", room: "106", weekType: WEEK_TYPES.ODD },
-        { id: "4_odd", subject: "Українська література", room: "106", weekType: WEEK_TYPES.ODD },
-        { id: "5", subject: "Алгебра", room: "106", weekType: WEEK_TYPES.ALL },
-        { id: "6", subject: "Алгебра", room: "106", weekType: WEEK_TYPES.ALL },
-        { id: "7_even_half", subject: "Історія України", room: "104", weekType: WEEK_TYPES.EVEN_HALF },
-        { id: "8_even_half", subject: "Історія України", room: "104", weekType: WEEK_TYPES.EVEN_HALF }
+        { id: "1", subject: "Геометрія", room: "104", teacher: "Іваненко О.М." },
+        { id: "2", subject: "Геометрія", room: "104", teacher: "Іваненко О.М." },
+        { id: "3", subject: "Українська література", room: "106", teacher: "Корнова В.М." },
+        { id: "4", subject: "Українська література", room: "106", teacher: "Корнова В.М." },
+        { id: "5", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
+        { id: "6", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
+        { id: "7", subject: "Історія України", room: "104", teacher: "Шевченко Т.П." },
+        { id: "8", subject: "Історія України", room: "104", teacher: "Шевченко Т.П." }
     ]
-};
-
-// Функція для визначення парності тижня
-export const getWeekType = (date) => {
-    const weekNumber = getWeekOfMonth(date);
-    return weekNumber % 2 === 0 ? 'even' : 'odd';
-};
-
-// Функція для визначення номера тижня в місяці
-export const getWeekOfMonth = (date) => {
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    const dayOfMonth = date.getDate();
-    return Math.ceil((dayOfMonth + firstDay.getDay()) / 7);
-};
-
-// Перевірка чи відповідає тиждень типу
-const matchesWeekType = (weekTypeRule, date) => {
-    const weekType = getWeekType(date);
-    const weekOfMonth = getWeekOfMonth(date);
-
-    switch(weekTypeRule) {
-        case WEEK_TYPES.ALL:
-            return true;
-        case WEEK_TYPES.ODD:
-            return weekType === 'odd';
-        case WEEK_TYPES.EVEN:
-            return weekType === 'even';
-        case WEEK_TYPES.EVEN_HALF: // 2-й і 4-й тиждень місяця
-            return weekType === 'even' && (weekOfMonth === 2 || weekOfMonth === 4);
-        case WEEK_TYPES.ODD_HALF: // 1-й і 3-й тиждень місяця
-            return weekType === 'odd' && (weekOfMonth === 1 || weekOfMonth === 3);
-        case WEEK_TYPES.FIRST_ODD: // Перший непарний
-            return weekType === 'odd' && weekOfMonth === 1;
-        case WEEK_TYPES.FOURTH: // Кожен четвертий тиждень
-            return weekOfMonth === 4;
-        default:
-            return true;
-    }
 };
 
 // Отримання розкладу на конкретний день
@@ -140,26 +72,11 @@ export const getScheduleForDate = (date) => {
     const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const dayName = dayNames[dayOfWeek];
 
-    const allLessonsForDay = baseSchedule[dayName] || [];
-    const finalSchedule = [];
-
-    bellSchedule.forEach((bellTime, index) => {
-        const lessonNumber = index + 1;
-
-        const lessonForSlot = allLessonsForDay.find(lesson => {
-            const isForSlot = lesson.id.startsWith(lessonNumber.toString()) ||
-                lesson.id.startsWith(`${lessonNumber}_`);
-
-            return isForSlot && matchesWeekType(lesson.weekType, date);
-        });
-
-        if (lessonForSlot) {
-            finalSchedule.push({
-                ...lessonForSlot,
-                lessonNumber: lessonNumber,
-                time: `${bellTime.start} - ${bellTime.end}`
-            });
-        }
+    const finalSchedule = baseSchedule[dayName];
+    finalSchedule.forEach(lesson => {
+        const schedule = bellSchedule[Number(lesson.id)-1]
+        lesson.lessonNumber = lesson.id;
+        lesson.time = schedule.start+" - "+schedule.end;
     });
 
     return finalSchedule;

@@ -3,11 +3,12 @@
 export const homeworkData = [
     {
         id: 1,
-        date: "2025-11-03",
+        date: "2025-11-03", // Дата, *на яку* задано ДЗ
         lessonId: "3",
+        subject: "Алгебра",
         title: "Розв'язати задачі",
-        description: "Завдання №45-52 з теми 'Логарифмічні рівняння'. Обов'язково показати всі кроки розв'язання.",
-        deadline: "14:25",
+        description: "Завдання №45-52 з теми 'Логарифмічні рівняння'.",
+        deadline: "14:25", // Час дедлайну в той самий день
         completed: false,
         type: "writing",
         attachments: []
@@ -16,14 +17,38 @@ export const homeworkData = [
         id: 2,
         date: "2025-11-04",
         lessonId: "5",
+        subject: "Українська мова",
         title: "Виконати вправи в підручнику",
         description: "Завдання 7, 5 параграф 13.",
         deadline: "12:30",
         completed: false,
         type: "writing",
         attachments: []
+    },
+    {
+        id: 3,
+        date: "2025-11-10",
+        lessonId: "1",
+        subject: "Англійська мова",
+        title: "Vocabulary p. 45",
+        description: "Вивчити нові слова, написати 10 речень.",
+        deadline: "08:50",
+        completed: true, // Це вже здано, його не має бути в дедлайнах
+        type: "writing",
+        attachments: []
+    },
+    {
+        id: 4,
+        date: "2025-11-07",
+        lessonId: "5",
+        subject: "Алгебра",
+        title: "Самостійна робота (підготовка)",
+        description: "Повторити параграфи 10-12.",
+        deadline: "08:50",
+        completed: false,
+        type: "writing",
+        attachments: []
     }
-
 ];
 
 // Отримати завдання за датою
@@ -39,4 +64,29 @@ export const getHomeworkForLesson = (lessonId, date) => {
 // Отримати кількість невиконаних завдань за датою
 export const getIncompleteHomeworkCount = (date) => {
     return homeworkData.filter(hw => hw.date === date && !hw.completed).length;
+};
+
+export const getUpcomingDeadlines = (limit = 3) => {
+    const today = new Date(/*"2025-11-03"*/); // Використовуємо поточну дату
+    today.setHours(0, 0, 0, 0); // Скидаємо час для коректного порівняння
+
+    const upcoming = homeworkData
+        .filter(hw => {
+            const hwDate = new Date(hw.date);
+            // Беремо тільки невиконані ДЗ з сьогодні і на майбутнє
+            return !hw.completed && hwDate >= today;
+        })
+        // Сортуємо: спочатку за датою (старіші перші),
+        // а якщо дати однакові - за часом дедлайну
+        .sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            if (dateA - dateB !== 0) {
+                return dateA - dateB;
+            }
+            // Якщо дати однакові, порівнюємо час
+            return a.deadline.localeCompare(b.deadline);
+        });
+
+    return upcoming.slice(0, limit);
 };

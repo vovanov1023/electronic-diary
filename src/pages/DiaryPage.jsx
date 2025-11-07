@@ -4,6 +4,8 @@ import './DiaryPage.css';
 import { getScheduleForDate, formatDate, formatShortDate } from '../data/scheduleData';
 import { getHomeworkForLesson, getIncompleteHomeworkCount } from '../data/homeworkData';
 import LessonCard from '../components/LessonCard';
+import { getMaterialsForLesson } from "../data/lessonMaterials";
+import { getGradeForLessonByDate } from "../data/gradesData";
 
 function DiaryPage({ onLessonClick, initialDate }) {
     const [currentDate, setCurrentDate] = useState(initialDate || new Date());
@@ -30,7 +32,6 @@ function DiaryPage({ onLessonClick, initialDate }) {
 
     // Отримання розкладу на поточний день
     const schedule = getScheduleForDate(currentDate);
-    const dateString = formatShortDate(currentDate);
 
     return (
         <div className="diary-page-new">
@@ -64,7 +65,10 @@ function DiaryPage({ onLessonClick, initialDate }) {
                 ) : (
                     <div className="lessons-list-diary">
                         {schedule.map((lesson) => {
+                            const dateString = formatShortDate(currentDate); // `currentDate` з `App.js`
                             const homework = getHomeworkForLesson(lesson.id, dateString);
+                            const lessonDetails = getMaterialsForLesson(lesson.id, dateString);
+                            const grade = getGradeForLessonByDate(lesson.subject, dateString);
 
                             return (
                                 <LessonCard
@@ -73,9 +77,14 @@ function DiaryPage({ onLessonClick, initialDate }) {
                                     subject={lesson.subject}
                                     time={lesson.time}
                                     room={lesson.room}
-                                    teacher={lesson.teacher}
                                     homework={homework}
                                     showDetails={true}
+
+                                    teacher={lesson.teacher}
+                                    topic={lessonDetails?.topic}
+                                    materials={lessonDetails?.materials}
+                                    grade={grade}
+
                                     onClick={() => onLessonClick && onLessonClick(lesson, homework, dateString, 'diary')}
                                 />
                             );

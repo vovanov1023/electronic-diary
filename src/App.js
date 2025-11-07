@@ -7,6 +7,11 @@ import {formatShortDate, getScheduleForDate} from "./data/scheduleData";
 import {getHomeworkForLesson} from "./data/homeworkData";
 import GradesPage from "./pages/GradesPage";
 import SubjectDetailPage from './pages/SubjectDetailPage';
+import DeadlinesWidget from './components/DeadlinesWidget';
+import RecentGradesWidget from './components/RecentGradesWidget';
+import './components/DashboardWidget.css';
+import { getMaterialsForLesson } from "./data/lessonMaterials";
+import { getGradeForLessonByDate } from "./data/gradesData";
 
 function HeaderContent({ title }) {
     return (
@@ -22,7 +27,7 @@ const currentDate = new Date(/*"2025-11-03"*/);
 const schedule = getScheduleForDate(currentDate);
 
 // Компонент головної сторінки
-function HomePage({ onLessonClick }) {
+function HomePage({ onLessonClick, onGradesClick, onNavigateToLesson }) {
     return (
         <>
             <div className="page-title">
@@ -41,6 +46,9 @@ function HomePage({ onLessonClick }) {
                         schedule.map((lesson) => {
                             const dateString = formatShortDate(currentDate);
                             const homework = getHomeworkForLesson(lesson.id, dateString);
+                            const lessonDetails = getMaterialsForLesson(lesson.id, dateString);
+                            const grade = getGradeForLessonByDate(lesson.subject, dateString);
+
                             return (
                                 <LessonCard
                                     key={lesson.id}
@@ -50,10 +58,26 @@ function HomePage({ onLessonClick }) {
                                     room={lesson.room}
                                     homework={homework}
                                     showDetails={false}
+
+                                    teacher={lesson.teacher}
+                                    topic={lessonDetails?.topic}
+                                    materials={lessonDetails?.materials}
+                                    grade={grade}
+
                                     onClick={() => onLessonClick && onLessonClick(lesson, homework, dateString, 'home')}
                                 />
-                            );}))
+                            );
+                        })
+                    )
                 }
+            </div>
+
+            <div className="dashboard-widgets">
+                <DeadlinesWidget onNavigateToLesson={onNavigateToLesson}/>
+                <RecentGradesWidget
+                    onGradesClick={onGradesClick}
+                    onNavigateToLesson={onNavigateToLesson}
+                />
             </div>
 
             <div className="news-section">
@@ -91,9 +115,9 @@ function App() {
 
         // Зберігаємо контекст звідки відкрили урок
         setPreviousContext({
-            source: source, // 'home' або 'diary'
-            date: date,     // дата уроку
-            tab: activeTab  // поточна вкладка
+            source: source,
+            date: date,
+            tab: activeTab
         });
 
         setSelectedLesson({ ...lesson, homework, date });
@@ -122,18 +146,43 @@ function App() {
     const handleSubjectClick = (subjectData) => {
         console.log('Клік на предмет:', subjectData);
         setSelectedSubject(subjectData);
-        // Також скидаємо урок, якщо він був відкритий (про всяк випадок)
         setSelectedLesson(null);
     };
 
     const handleBackFromSubject = () => {
         setSelectedSubject(null);
-        // Переконуємось, що ми на вкладці "Успішність"
         setActiveTab('grades');
     };
 
+    const handleGradesClick = () => {
+        setActiveTab('grades');
+        setSelectedLesson(null);
+        setSelectedSubject(null);
+        setPreviousContext(null);
+        setDiaryDate(null);
+    };
+
+    const navigateToLesson = (lessonId, dateString, source) => {
+        console.log(`Навігація до уроку: ${lessonId} на ${dateString} з ${source}`);
+
+        const lessonDate = new Date(dateString);
+        const schedule = getScheduleForDate(lessonDate);
+
+        const lesson = schedule.find(l => l.id === lessonId);
+
+        if (!lesson) {
+            console.error("Помилка: Урок не знайдено!");
+            alert("Помилка: не вдалося знайти цей урок.");
+            return;
+        }
+
+        const homework = getHomeworkForLesson(lessonId, dateString);
+
+        // Використовуємо наш існуючий обробник
+        handleLessonClick(lesson, homework, dateString, source);
+    };
+
     const renderContent = () => {
-        // 1. Якщо вибраний ПРЕДМЕТ - показуємо його деталі
         if (selectedSubject) {
             return (
                 <SubjectDetailPage
@@ -143,7 +192,6 @@ function App() {
             );
         }
 
-        // 2. Якщо вибраний УРОК - показуємо його деталі
         if (selectedLesson) {
             return (
                 <LessonDetailPage
@@ -158,11 +206,14 @@ function App() {
         // 3. Інакше показуємо звичайні сторінки
         switch(activeTab) {
             case 'home':
-                return <HomePage onLessonClick={handleLessonClick} />;
+                return <HomePage
+                    onLessonClick={handleLessonClick}
+                    onGradesClick={handleGradesClick}
+                    onNavigateToLesson={navigateToLesson}
+                />;
             case 'diary':
                 return <DiaryPage onLessonClick={handleLessonClick} initialDate={diaryDate} />;
             case 'grades':
-                // Передаємо новий обробник кліка в GradesPage
                 return <GradesPage onSubjectClick={handleSubjectClick} />;
             default:
                 return <HomePage onLessonClick={handleLessonClick} />;

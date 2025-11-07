@@ -16,6 +16,10 @@ function GradesPage({ onSubjectClick }) {
         return calculateAverage(allAverages.map(avg => ({ grade: avg })));
     }, [subjectsData]);
 
+    const totalAbsences = useMemo(() => {
+        return subjectsData.reduce((acc, s) => acc + (s.absenceCount || 0), 0);
+    }, [subjectsData]);
+
     return (
         <div className="grades-page">
             {/* Селектор семестру */}
@@ -46,10 +50,10 @@ function GradesPage({ onSubjectClick }) {
                     <span className="stats-label">Загальний середній бал</span>
                     <span className="stats-value">{totalAverage}</span>
                 </div>
-                {/* Тут можна додати місце в рейтингу, пропуски тощо */}
+
                 <div className="stats-item">
                     <span className="stats-label">Пропусків (Н)</span>
-                    <span className="stats-value">3</span>
+                    <span className="stats-value">{totalAbsences}</span>
                 </div>
             </div>
 

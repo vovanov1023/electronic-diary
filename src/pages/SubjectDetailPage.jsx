@@ -15,8 +15,9 @@ const formatFullDate = (dateString) => {
 
 function SubjectDetailPage({ subjectData, onBack }) {
 
-    // Розраховуємо середній бал (ти вже маєш цю функцію)
     const average = calculateAverage(subjectData.semester1);
+    const absenceCount = subjectData.semester1_absences ? subjectData.semester1_absences.length : 0;
+    const absences = subjectData.semester1_absences || [];
 
     return (
         <div className="subject-detail-page">
@@ -51,6 +52,10 @@ function SubjectDetailPage({ subjectData, onBack }) {
                             <span className="stats-value-small">{average}</span>
                         </div>
                         <div className="subject-stats-item">
+                            <span className="stats-label">Пропусків</span>
+                            <span className="stats-value-small">{absenceCount}</span>
+                        </div>
+                        <div className="subject-stats-item">
                             <span className="stats-label">Тематична</span>
                             <span className="stats-value-small">?</span>
                         </div>
@@ -70,7 +75,7 @@ function SubjectDetailPage({ subjectData, onBack }) {
 
                     {subjectData.semester1.length > 0 ? (
                         <div className="full-grades-list">
-                            {/* Відображаємо в зворотному порядку - новіші вгорі */}
+                            {/* Відображаємо у зворотному порядку - новіші вгорі */}
                             {[...subjectData.semester1].reverse().map((grade) => (
                                 <div key={grade.id} className="full-grade-item">
                                     <div className="full-grade-main">
@@ -91,6 +96,43 @@ function SubjectDetailPage({ subjectData, onBack }) {
                         </div>
                     ) : (
                         <p className="no-grades-message">Оцінок за цей семестр ще немає.</p>
+                    )}
+                </section>
+
+                <section className="detail-section">
+                    <h2 className="section-title">
+                        <span className="material-symbols-outlined">event_busy</span>
+                        Список пропусків
+                    </h2>
+
+                    {absences.length > 0 ? (
+                        <div className="full-absences-list">
+                            {[...absences].reverse().map((absence) => (
+                                <div key={absence.id} className="full-absence-item">
+                                    <div className="full-absence-main">
+                                        <div className="full-absence-icon">
+                                            <span className="material-symbols-outlined">
+                                                person_off
+                                            </span>
+                                        </div>
+                                        <div className="full-absence-info">
+                                            <span className="full-absence-type">
+                                                Пропуск
+                                            </span>
+                                            <span className="full-absence-date">{formatFullDate(absence.date)}</span>
+                                        </div>
+                                    </div>
+                                    {absence.comment && (
+                                        <div className="full-absence-comment">
+                                            <span className="material-symbols-outlined">chat_bubble</span>
+                                            <span>{absence.comment}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="no-grades-message">Пропусків за цей семестр немає.</p>
                     )}
                 </section>
 
