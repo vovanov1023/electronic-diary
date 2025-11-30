@@ -176,3 +176,75 @@
     font-size: 18px;
     color: var(--primary);
 }
+
+.calculator-box {
+    background: var(--background);
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px dashed var(--primary);
+}
+
+.calc-hint {
+    font-size: 14px;
+    color: var(--on-surface-variant);
+    margin-bottom: 12px;
+}
+
+.calc-controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.calc-input {
+    width: 80px;
+    padding: 10px;
+    border: 2px solid var(--secondary-container);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.calc-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.calc-btn {
+    flex: 1;
+    background: var(--secondary-container);
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.calc-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.calc-result {
+    display: flex;
+    gap: 12px;
+    background: #e0e7ff; /* light indigo */
+    padding: 12px;
+    border-radius: 8px;
+    align-items: flex-start;
+}
+
+.calc-result .material-symbols-outlined {
+    color: #4338ca;
+    font-size: 20px;
+}
+
+.calc-result p {
+    margin: 0;
+    font-size: 14px;
+    color: #312e81;
+    line-height: 1.4;
+    white-space: pre-line; /* Щоб працювали переноси рядків */
+}

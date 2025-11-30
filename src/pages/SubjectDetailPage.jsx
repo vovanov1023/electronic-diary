@@ -1,5 +1,5 @@
 // src/pages/SubjectDetailPage.jsx
-import React from 'react';
+import React, {useState} from 'react';
 import { calculateAverage } from '../data/gradesData';
 import './SubjectDetailPage.css';
 import {
@@ -36,6 +36,44 @@ function SubjectDetailPage({ subjectData, onBack }) {
             grade: g.grade,
             type: g.type
         }));
+
+    const [targetGrade, setTargetGrade] = useState("");
+    const [calcResult, setCalcResult] = useState(null);
+
+    const calculateNeededGrades = () => {
+        const target = parseFloat(targetGrade);
+        if (!target || target > 12 || target < 1) {
+            setCalcResult("Введіть реальну оцінку (1-12)");
+            return;
+        }
+
+        if (target <= average) {
+            setCalcResult("У вас вже є цей бал (або вищий)! 🎉");
+            return;
+        }
+
+        // Математика:
+        // (Сума_поточних + X * 12) / (Кількість_поточних + X) = Ціль
+        // X = (Ціль * Кількість - Сума) / (12 - Ціль)
+
+        const numericGrades = subjectData.semester1
+            .filter(g => typeof g.grade === 'number')
+            .map(g => g.grade);
+
+        const currentSum = numericGrades.reduce((a, b) => a + b, 0);
+        const count = numericGrades.length;
+
+        const needed12 = Math.ceil((target * count - currentSum) / (12 - target));
+
+        const needed11 = Math.ceil((target * count - currentSum) / (11 - target));
+
+        if (needed12 > 50 || needed12 < 0) {
+            setCalcResult("На жаль, це математично майже неможливо в цьому семестрі 😢");
+        } else {
+            setCalcResult(`Щоб мати ${target}, треба отримати приблизно: 
+         ${needed12} оцінок "12" АБО ${needed11} оцінок "11".`);
+        }
+    };
 
     return (
         <div className="subject-detail-page">
@@ -125,6 +163,37 @@ function SubjectDetailPage({ subjectData, onBack }) {
                             <p className="no-grades-message" style={{height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                 Недостатньо даних для графіка
                             </p>
+                        )}
+                    </div>
+                </section>
+
+                {/* Калькулятор оцінок */}
+                <section className="detail-section">
+                    <h2 className="section-title">
+                        <span className="material-symbols-outlined">calculate</span>
+                        Планування (Калькулятор)
+                    </h2>
+                    <div className="calculator-box">
+                        <p className="calc-hint">Яку семестрову оцінку ти хочеш?</p>
+                        <div className="calc-controls">
+                            <input
+                                type="number"
+                                className="calc-input"
+                                value={targetGrade}
+                                onChange={(e) => setTargetGrade(e.target.value)}
+                                placeholder="11"
+                                max="12"
+                                min="1"
+                            />
+                            <button className="calc-btn" onClick={calculateNeededGrades}>
+                                Розрахувати
+                            </button>
+                        </div>
+                        {calcResult && (
+                            <div className="calc-result">
+                                <span className="material-symbols-outlined">lightbulb</span>
+                                <p>{calcResult}</p>
+                            </div>
                         )}
                     </div>
                 </section>
