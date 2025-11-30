@@ -2,7 +2,6 @@
 import React from 'react';
 import './LessonCard.css';
 
-// Іконки для матеріалів (можна винести в окремий файл)
 const getIconForType = (type) => {
     const icons = {
         link: 'link',
@@ -21,9 +20,9 @@ function LessonCard({
                         room,
                         teacher,
                         homework,
-                        grade, // Новий пропс (об'єкт)
-                        topic, // Новий пропс (рядок)
-                        materials, // Новий пропс (масив)
+                        grade,
+                        topic,
+                        materials,
                         onClick,
                         showDetails = false
                     }) {
@@ -32,27 +31,21 @@ function LessonCard({
             className="lesson-card-component"
             onClick={onClick}
         >
-            {/* === ЛІВА КОЛОНКА (ЧАС) === */}
             <div className="lesson-time-badge">
                 <div className="lesson-number-component">{lessonNumber}</div>
                 {time && <div className="lesson-time-component">{time.replace(' - ', '\n')}</div>}
             </div>
 
-            {/* === ПРАВА КОЛОНКА (ІНФО) === */}
             <div className="lesson-main-info">
 
-                {/* --- Верхній рядок (Предмет, Оцінка, Кабінет) --- */}
                 <div className="lesson-subject-row">
                     <h3 className="lesson-subject-component">{subject}</h3>
-
-                    {/* Оцінка (якщо є) */}
                     {grade && (
                         <div className="lesson-grade-badge">
                             {grade.grade}
                         </div>
                     )}
 
-                    {/* Кабінет (виправлено: показуємо завжди, якщо є) */}
                     {room && !showDetails && (
                         <span className="lesson-room-badge">
                             <span className="material-symbols-outlined">door_front</span>
@@ -61,12 +54,10 @@ function LessonCard({
                     )}
                 </div>
 
-                {/* --- Тема уроку (якщо є і деталі) --- */}
                 {topic && (
                     <p className="lesson-topic-preview">{topic}</p>
                 )}
 
-                {/* --- Деталі (Вчитель, Кабінет - для Diary) --- */}
                 {showDetails && (room || teacher) && (
                     <div className="lesson-details">
                         {teacher && (

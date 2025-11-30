@@ -90,3 +90,34 @@ export const getUpcomingDeadlines = (limit = 3) => {
 
     return upcoming.slice(0, limit);
 };
+
+export const upsertHomework = (lessonId, date, subject, hwDetails) => {
+    const key = `${lessonId}:${date}`;
+
+    // Шукаємо, чи існує вже ДЗ
+    let existingHw = homeworkData.find(hw => hw.lessonId === lessonId && hw.date === date);
+
+    if (existingHw) {
+        // Оновлюємо існуюче
+        existingHw.title = hwDetails.title;
+        existingHw.description = hwDetails.description;
+        existingHw.deadline = hwDetails.deadline;
+        console.log(`Оновлено ДЗ для ${key}:`, existingHw);
+    } else {
+        // Створюємо нове
+        const newHw = {
+            id: homeworkData.length + 100, // Унікальний ID
+            date: date,
+            lessonId: lessonId,
+            subject: subject,
+            title: hwDetails.title,
+            description: hwDetails.description,
+            deadline: hwDetails.deadline,
+            completed: false,
+            type: "writing",
+            attachments: []
+        };
+        homeworkData.push(newHw);
+        console.log(`Створено ДЗ для ${key}:`, newHw);
+    }
+};

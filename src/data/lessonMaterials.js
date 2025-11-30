@@ -113,3 +113,23 @@ export const lessonComments = {
 export const getCommentsForLesson = (lessonId, date) => {
     return lessonComments[lessonId+":"+date] || [];
 };
+
+export const upsertLessonDetails = (lessonId, date, details) => {
+    const key = `${lessonId}:${date}`;
+
+    // Якщо для цього уроку ще немає запису, створюємо його
+    if (!lessonMaterials[key]) {
+        lessonMaterials[key] = {
+            topic: "",
+            description: "",
+            materials: []
+        };
+    }
+
+    // Оновлюємо дані
+    lessonMaterials[key].topic = details.topic;
+    lessonMaterials[key].description = details.description;
+
+    console.log(`Збережено дані для ${key}:`, lessonMaterials[key]);
+    return lessonMaterials[key];
+};

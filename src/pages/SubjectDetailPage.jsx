@@ -2,6 +2,15 @@
 import React from 'react';
 import { calculateAverage } from '../data/gradesData';
 import './SubjectDetailPage.css';
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer
+} from 'recharts';
 
 // Утиліта для дати (YYYY-MM-DD -> DD.MM.YYYY)
 const formatFullDate = (dateString) => {
@@ -18,6 +27,15 @@ function SubjectDetailPage({ subjectData, onBack }) {
     const average = calculateAverage(subjectData.semester1);
     const absenceCount = subjectData.semester1_absences ? subjectData.semester1_absences.length : 0;
     const absences = subjectData.semester1_absences || [];
+
+    const chartData = [...subjectData.semester1]
+        .filter(g => typeof g.grade === 'number')
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .map(g => ({
+            date: formatFullDate(g.date).slice(0, 5), // "03.11"
+            grade: g.grade,
+            type: g.type
+        }));
 
     return (
         <div className="subject-detail-page">
@@ -63,6 +81,51 @@ function SubjectDetailPage({ subjectData, onBack }) {
                             <span className="stats-label">Семестрова</span>
                             <span className="stats-value-small">{subjectData.semester1_final || '?'}</span>
                         </div>
+                    </div>
+                </section>
+
+                {/* Графік успішності */}
+                <section className="detail-section">
+                    <h2 className="section-title">
+                        <span className="material-symbols-outlined">show_chart</span>
+                        Динаміка успішності
+                    </h2>
+
+                    <div style={{ width: '100%', height: 200 }}>
+                        {chartData.length > 1 ? (
+                            <ResponsiveContainer>
+                                <LineChart data={chartData}>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E0E0E0" />
+                                    <XAxis
+                                        dataKey="date"
+                                        tick={{fontSize: 12, fill: '#666'}}
+                                        axisLine={false}
+                                        tickLine={false}
+                                        dy={10}
+                                    />
+                                    <YAxis
+                                        domain={[1, 12]}
+                                        hide={true} // Ховаємо вісь Y для чистоти
+                                    />
+                                    <Tooltip
+                                        contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.1)'}}
+                                        itemStyle={{color: '#6750A4', fontWeight: 600}}
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="grade"
+                                        stroke="#6750A4"
+                                        strokeWidth={3}
+                                        dot={{fill: '#6750A4', r: 4, strokeWidth: 0}}
+                                        activeDot={{r: 6}}
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <p className="no-grades-message" style={{height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                Недостатньо даних для графіка
+                            </p>
+                        )}
                     </div>
                 </section>
 

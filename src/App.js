@@ -11,14 +11,22 @@ import DeadlinesWidget from './components/DeadlinesWidget';
 import RecentGradesWidget from './components/RecentGradesWidget';
 import './components/DashboardWidget.css';
 import { getMaterialsForLesson } from "./data/lessonMaterials";
-import { getGradeForLessonByDate } from "./data/gradesData";
+import { getGradeForLesson } from "./data/gradesData";
+import TeacherJournalPage from './pages/TeacherJournalPage';
+import TeacherLessonsPage from './pages/TeacherLessonsPage';
+import './pages/DiaryPage.css';
+import TeacherLessonEditorPage from './pages/TeacherLessonEditorPage';
+import './pages/LessonDetailPage.css';
+import { newsData } from './data/newsData';
+import TeacherNotificationsPage from './pages/TeacherNotificationsPage';
+import LoginPage from './pages/LoginPage';
 
-function HeaderContent({ title }) {
+function HeaderContent({ title, onLogout }) {
     return (
         <div className="header-content">
             <span className="material-symbols-outlined icon">menu</span>
             <h1 className="header-title">{title}</h1>
-            <img src={"images/header/profile.svg"} alt="profileIcon" className="icon"/>
+            <img src={"images/header/profile.svg"} alt="profileIcon" className="icon" onClick={onLogout} />
         </div>
     );
 }
@@ -47,7 +55,7 @@ function HomePage({ onLessonClick, onGradesClick, onNavigateToLesson }) {
                             const dateString = formatShortDate(currentDate);
                             const homework = getHomeworkForLesson(lesson.id, dateString);
                             const lessonDetails = getMaterialsForLesson(lesson.id, dateString);
-                            const grade = getGradeForLessonByDate(lesson.subject, dateString);
+                            const grade = getGradeForLesson(lesson.subject, dateString, lesson.id);
 
                             return (
                                 <LessonCard
@@ -80,24 +88,66 @@ function HomePage({ onLessonClick, onGradesClick, onNavigateToLesson }) {
                 />
             </div>
 
+            {/* Стрічка новин */}
             <div className="news-section">
                 <h3 className="news-title">Стрічка новин</h3>
-                <div className="news-placeholder">
-                    <p>Тут будуть оголошення</p>
+
+                <div className="news-list">
+                    {newsData.map(news => (
+                        <div key={news.id} className="news-item">
+                            <div className="news-header-row">
+                                <span className="news-item-title">{news.title}</span>
+                                <span className="news-item-date">{news.date}</span>
+                            </div>
+                            <p className="news-item-text">{news.text}</p>
+                            <div className="news-item-author">
+                                <span className="material-symbols-outlined">person</span>
+                                {news.author}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </>
     );
 }
-
 function App() {
     const [activeTab, setActiveTab] = useState('home');
     const [selectedLesson, setSelectedLesson] = useState(null);
     const [previousContext, setPreviousContext] = useState(null);
     const [diaryDate, setDiaryDate] = useState(null);
     const [selectedSubject, setSelectedSubject] = useState(null);
+    const [userRole, setUserRole] = useState(null);
+    const [teacherActiveTab, setTeacherActiveTab] = useState('journal');
+    const [lessonToEdit, setLessonToEdit] = useState(null);
+
+    const handleLogout = () => {
+        setUserRole(null);
+        setActiveTab('home');
+        setTeacherActiveTab('journal');
+        setSelectedLesson(null);
+        setSelectedSubject(null);
+        setLessonToEdit(null);
+    };
+    if (!userRole) {
+        return <LoginPage onLogin={(role) => setUserRole(role)} />;
+    }
 
     const getHeaderTitle = () => {
+        // === ЛОГІКА ВЧИТЕЛЯ ===
+        if (userRole === 'teacher') {
+            if (lessonToEdit) {
+                return "Редактор Уроку";
+            }
+            switch(teacherActiveTab) {
+                case 'journal': return 'Журнал';
+                case 'lessons': return 'Мої Уроки';
+                case 'notify': return 'Сповіщення';
+                default: return 'Кабінет Вчителя';
+            }
+        }
+
+        // === ЛОГІКА УЧНЯ ===
         if (selectedSubject) return selectedSubject.subject;
         if (selectedLesson) return selectedLesson.subject;
 
@@ -162,6 +212,25 @@ function App() {
         setDiaryDate(null);
     };
 
+    // Обробник для редагування уроку вчителем
+    const handleLessonEdit = (lesson, dateString) => {
+        // Знаходимо всю інфу про урок, перш ніж відкрити редактор
+        const topic = getMaterialsForLesson(lesson.id, dateString)?.topic;
+        const homework = getHomeworkForLesson(lesson.id, dateString);
+
+        setLessonToEdit({
+            lesson: lesson,
+            dateString: dateString,
+            topic: topic,
+            homework: homework
+        });
+    };
+
+    const handleCloseLessonEditor = () => {
+        setLessonToEdit(null);
+        setTeacherActiveTab('lessons'); // Повертаємось на список уроків
+    };
+
     const navigateToLesson = (lessonId, dateString, source) => {
         console.log(`Навігація до уроку: ${lessonId} на ${dateString} з ${source}`);
 
@@ -183,6 +252,29 @@ function App() {
     };
 
     const renderContent = () => {
+        // === ЛОГІКА ВЧИТЕЛЯ ===
+        if (userRole === 'teacher') {
+            if (lessonToEdit) {
+                return (
+                    <TeacherLessonEditorPage
+                        lessonData={lessonToEdit}
+                        onBack={handleCloseLessonEditor}
+                    />
+                );
+            }
+            switch(teacherActiveTab) {
+                case 'journal':
+                    return <TeacherJournalPage />;
+                case 'lessons':
+                    return <TeacherLessonsPage onLessonSelect={handleLessonEdit} />;
+                case 'notify':
+                    return <TeacherNotificationsPage />;
+                default:
+                    return <TeacherJournalPage />;
+            }
+        }
+
+        // === ЛОГІКА УЧНЯ ===
         if (selectedSubject) {
             return (
                 <SubjectDetailPage
@@ -223,15 +315,15 @@ function App() {
     return (
         <div className="app">
             <header className="header">
-                <HeaderContent title={getHeaderTitle()} />
+                <HeaderContent title={getHeaderTitle()} onLogout={handleLogout} />
             </header>
 
             <main className="main-content">
                 {renderContent()}
             </main>
-
+            {userRole === 'student' && (
             <nav className="bottom-nav">
-                <HeaderContent title={getHeaderTitle()} />
+                <HeaderContent title={getHeaderTitle()} onLogout={handleLogout} />
                 <div className="nav-content">
                     <button
                         onClick={() => {
@@ -241,7 +333,7 @@ function App() {
                             setPreviousContext(null);
                             setDiaryDate(null);
                         }}
-                        className={`nav-button ${activeTab === 'home' && !selectedLesson ? 'active' : ''}`}
+                        className={`nav-button ${activeTab === 'home' && !selectedLesson && !selectedSubject ? 'active' : ''}`}
                     >
                         <div className={"button-icon-wrapper"}>
                             <span className="material-symbols-outlined nav-icon">home</span>
@@ -254,9 +346,10 @@ function App() {
                             setActiveTab('diary');
                             setSelectedLesson(null);
                             setPreviousContext(null);
+                            setSelectedSubject(null);
                             setDiaryDate(null);
                         }}
-                        className={`nav-button ${activeTab === 'diary' && !selectedLesson ? 'active' : ''}`}
+                        className={`nav-button ${activeTab === 'diary' && !selectedLesson && !selectedSubject ? 'active' : ''}`}
                     >
                         <div className={"button-icon-wrapper"}>
                             <span className="material-symbols-outlined nav-icon">today</span>
@@ -269,9 +362,10 @@ function App() {
                             setActiveTab('grades');
                             setSelectedLesson(null);
                             setPreviousContext(null);
+                            setSelectedSubject(null);
                             setDiaryDate(null);
                         }}
-                        className={`nav-button ${activeTab === 'grades' && !selectedLesson ? 'active' : ''}`}
+                        className={`nav-button ${activeTab === 'grades' && !selectedLesson&& !selectedSubject ? 'active' : ''}`}
                     >
                         <div className={"button-icon-wrapper"}>
                             <span className="material-symbols-outlined nav-icon">award_star</span>
@@ -280,6 +374,48 @@ function App() {
                     </button>
                 </div>
             </nav>
+            )}
+
+            {userRole === 'teacher' && (
+                <nav className="bottom-nav">
+                    <HeaderContent title={getHeaderTitle()} onLogout={handleLogout} />
+                    <div className="nav-content">
+                        <button
+                            onClick={() => {
+                                    setTeacherActiveTab('journal');
+                                    setLessonToEdit(null);
+                                }
+                            }
+                            className={`nav-button ${teacherActiveTab === 'journal' ? 'active' : ''}`}
+                        >
+                            <div className={"button-icon-wrapper"}>
+                                <span className="material-symbols-outlined nav-icon">book</span>
+                            </div>
+                            <span>Журнал</span>
+                        </button>
+
+                        <button
+                            onClick={() => {setTeacherActiveTab('lessons'); setLessonToEdit(null);}}
+                            className={`nav-button ${teacherActiveTab === 'lessons' ? 'active' : ''}`}
+                        >
+                            <div className={"button-icon-wrapper"}>
+                                <span className="material-symbols-outlined nav-icon">edit_calendar</span>
+                            </div>
+                            <span>Мої Уроки</span>
+                        </button>
+
+                        <button
+                            onClick={() => {setTeacherActiveTab('notify'); setLessonToEdit(null);}}
+                            className={`nav-button ${teacherActiveTab === 'notify' ? 'active' : ''}`}
+                        >
+                            <div className={"button-icon-wrapper"}>
+                                <span className="material-symbols-outlined nav-icon">campaign</span>
+                            </div>
+                            <span>Сповіщення</span>
+                        </button>
+                    </div>
+                </nav>
+            )}
         </div>
     );
 }

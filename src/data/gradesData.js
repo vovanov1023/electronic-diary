@@ -14,7 +14,9 @@ export const gradesData = {
         subject: "Алгебра",
         teacher: "Іваненко О.М.",
         semester1: [
-            { id: 1, type: "СР", grade: 10, max: 12, date: "2025-11-04", lessonId: "7" }
+            { id: 1, type: "СР", grade: 1, max: 12, date: "2025-11-04", lessonId: "7" },
+            { id: 2, type: "Поточна", grade: 12, max: 12, date: "2025-11-05", lessonId: "1" },
+            { id: 3, type: "КР", grade: 1, max: 12, date: "2025-11-05", lessonId: "2" }
         ],
         semester1_absences: [
             { id: 'a1', date: '2025-09-18', },
@@ -99,10 +101,10 @@ export const getAllGrades = () => {
     );
 };
 
-export const getGradeForLessonByDate = (subjectName, dateString) => {
+export const getGradeForLesson = (subjectName, dateString, lessonId) => {
     const grades = getGradesForLesson(subjectName);
     if (!grades) return null;
-    return grades.find(grade => grade.date === dateString) || null;
+    return grades.find(grade => grade.date === dateString && grade.lessonId === lessonId) || null;
 };
 
 export const getRecentGrades = (limit = 3) => {
@@ -121,4 +123,67 @@ export const getRecentGrades = (limit = 3) => {
 
     allGrades.sort((a, b) => new Date(b.date) - new Date(a.date));
     return allGrades.slice(0, limit);
+};
+
+export const syncGradeFromJournal = (subjectId, date, value) => {
+    const subjectData = gradesData[subjectId];
+    if (!subjectData) return;
+
+    const isAbsence = ["н", "Н"].includes(value);
+    const isEmpty = value.trim() === "";
+
+    // 1. Спочатку шукаємо, чи вже є оцінка/пропуск за цю дату
+    const existingGradeIndex = subjectData.semester1.findIndex(g => g.date === date && g.comment === "Виставлено через журнал");
+    const existingAbsenceIndex = subjectData.semester1_absences.findIndex(a => a.date === date);
+
+    // Логіка ВИДАЛЕННЯ (якщо вчитель стер оцінку)
+    if (isEmpty) {
+        if (existingGradeIndex !== -1) subjectData.semester1.splice(existingGradeIndex, 1);
+        if (existingAbsenceIndex !== -1) subjectData.semester1_absences.splice(existingAbsenceIndex, 1);
+        console.log(`Запис за ${date} видалено.`);
+        return;
+    }
+
+    // Логіка ДЛЯ ПРОПУСКІВ
+    if (isAbsence) {
+        // Якщо була звичайна оцінка - видаляємо її
+        if (existingGradeIndex !== -1) subjectData.semester1.splice(existingGradeIndex, 1);
+
+        // Оновлюємо або додаємо пропуск
+        if (existingAbsenceIndex !== -1) {
+            subjectData.semester1_absences[existingAbsenceIndex].type = value.toUpperCase();
+        } else {
+            subjectData.semester1_absences.push({
+                id: Date.now(),
+                date: date,
+                type: value.toUpperCase()
+            });
+        }
+        console.log(`Пропуск синхронізовано: ${value}`);
+    }
+    // Логіка ДЛЯ ОЦІНОК (числа)
+    else {
+        // Якщо був пропуск - видаляємо його
+        if (existingAbsenceIndex !== -1) subjectData.semester1_absences.splice(existingAbsenceIndex, 1);
+
+        const numValue = parseInt(value);
+        if (isNaN(numValue)) return; // Захист від NaN
+
+        if (existingGradeIndex !== -1) {
+            // Оновлюємо існуючу
+            subjectData.semester1[existingGradeIndex].grade = numValue;
+        } else {
+            // Створюємо нову
+            subjectData.semester1.push({
+                id: Date.now(),
+                type: "Поточна",
+                grade: numValue,
+                max: 12,
+                date: date,
+                lessonId: "temp",
+                comment: "Виставлено через журнал"
+            });
+        }
+        console.log(`Оцінка синхронізована: ${numValue}`);
+    }
 };

@@ -1,0 +1,158 @@
+/* src/pages/TeacherJournalPage.css */
+
+.journal-page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.journal-selectors {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.journal-select {
+    padding: 10px 14px;
+    font-size: 14px;
+    border: 2px solid var(--secondary-container);
+    border-radius: 8px;
+    background: white;
+    font-weight: 500;
+    color: var(--on-surface);
+}
+
+.journal-select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.journal-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border: 1px solid var(--secondary-container);
+}
+
+.journal-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.journal-table th,
+.journal-table td {
+    border: 1px solid var(--secondary-container);
+    text-align: left;
+    height: 48px;
+}
+
+.journal-table th.student-name-header,
+.journal-table td.student-name-cell {
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 1;
+    min-width: 180px;
+    max-width: 200px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-right-width: 2px;
+}
+
+.journal-table th.student-name-header {
+    z-index: 2;
+    border-right-width: 2px;
+}
+
+.student-index {
+    display: inline-block;
+    width: 25px;
+    color: var(--on-surface-variant);
+    font-size: 13px;
+}
+
+/* Заголовки дат */
+.date-header {
+    text-align: center;
+    vertical-align: middle;
+    min-width: 65px;
+    font-weight: 500;
+    padding: 8px;
+    border-bottom-width: 2px;
+}
+
+.date-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.date-cell .date-type {
+    font-size: 11px;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Клітинки для оцінок */
+.grade-cell {
+    vertical-align: middle;
+}
+
+.grade-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 4px 8px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--on-surface);
+    transition: background-color 0.2s;
+    box-sizing: border-box;
+}
+
+.grade-input:focus {
+    outline: 2px solid var(--primary);
+    background: #f0edff;
+    z-index: 5;
+    position: relative;
+}
+
+/* Високі */
+.grade-input[value="10"],
+.grade-input[value="11"],
+.grade-input[value="12"] {
+    color: #15803d;
+}
+/* Середні */
+.grade-input[value="7"],
+.grade-input[value="8"],
+.grade-input[value="9"] {
+    color: #656A23;
+}
+/* Низькі */
+.grade-input[value="4"],
+.grade-input[value="5"],
+.grade-input[value="6"] {
+    color: #b45309;
+}
+/* Дуже низькі */
+.grade-input[value="1"],
+.grade-input[value="2"],
+.grade-input[value="3"] {
+    color: #b91c1c;
+}
+/* Пропуск */
+.grade-input[value="н"],
+.grade-input[value="Н"] {
+    color: #b91c1c;
+    font-weight: 700;
+}

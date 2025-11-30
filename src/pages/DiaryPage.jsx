@@ -5,7 +5,7 @@ import { getScheduleForDate, formatDate, formatShortDate } from '../data/schedul
 import { getHomeworkForLesson, getIncompleteHomeworkCount } from '../data/homeworkData';
 import LessonCard from '../components/LessonCard';
 import { getMaterialsForLesson } from "../data/lessonMaterials";
-import { getGradeForLessonByDate } from "../data/gradesData";
+import {getGradeForLesson} from "../data/gradesData";
 
 function DiaryPage({ onLessonClick, initialDate }) {
     const [currentDate, setCurrentDate] = useState(initialDate || new Date());
@@ -24,7 +24,6 @@ function DiaryPage({ onLessonClick, initialDate }) {
         setCurrentDate(newDate);
     };
 
-    // Свайп для мобілки
     const swipeHandlers = useSwipeable({
         onSwipedLeft: () => goToNextDay(),
         onSwipedRight: () => goToPreviousDay()
@@ -65,10 +64,10 @@ function DiaryPage({ onLessonClick, initialDate }) {
                 ) : (
                     <div className="lessons-list-diary">
                         {schedule.map((lesson) => {
-                            const dateString = formatShortDate(currentDate); // `currentDate` з `App.js`
+                            const dateString = formatShortDate(currentDate);
                             const homework = getHomeworkForLesson(lesson.id, dateString);
                             const lessonDetails = getMaterialsForLesson(lesson.id, dateString);
-                            const grade = getGradeForLessonByDate(lesson.subject, dateString);
+                            const grade = getGradeForLesson(lesson.subject, dateString, lesson.id);
 
                             return (
                                 <LessonCard
