@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/electronic-diary/static/css/main.bb717ccb.css",
-    "main.js": "/electronic-diary/static/js/main.012d9897.js",
-    "static/js/453.50298fb7.chunk.js": "/electronic-diary/static/js/453.50298fb7.chunk.js",
+    "main.css": "/electronic-diary/static/css/main.c5398ffd.css",
+    "main.js": "/electronic-diary/static/js/main.d6733cef.js",
+    "static/js/453.138cdfb6.chunk.js": "/electronic-diary/static/js/453.138cdfb6.chunk.js",
     "index.html": "/electronic-diary/index.html",
-    "main.bb717ccb.css.map": "/electronic-diary/static/css/main.bb717ccb.css.map",
-    "main.012d9897.js.map": "/electronic-diary/static/js/main.012d9897.js.map",
-    "453.50298fb7.chunk.js.map": "/electronic-diary/static/js/453.50298fb7.chunk.js.map"
+    "main.c5398ffd.css.map": "/electronic-diary/static/css/main.c5398ffd.css.map",
+    "main.d6733cef.js.map": "/electronic-diary/static/js/main.d6733cef.js.map",
+    "453.138cdfb6.chunk.js.map": "/electronic-diary/static/js/453.138cdfb6.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.bb717ccb.css",
-    "static/js/main.012d9897.js"
+    "static/css/main.c5398ffd.css",
+    "static/js/main.d6733cef.js"
   ]
 }
