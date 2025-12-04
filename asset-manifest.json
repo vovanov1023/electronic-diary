@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/electronic-diary/static/css/main.c5398ffd.css",
-    "main.js": "/electronic-diary/static/js/main.d6733cef.js",
+    "main.css": "/electronic-diary/static/css/main.e0e8e905.css",
+    "main.js": "/electronic-diary/static/js/main.d9ae5ef8.js",
     "static/js/453.138cdfb6.chunk.js": "/electronic-diary/static/js/453.138cdfb6.chunk.js",
     "index.html": "/electronic-diary/index.html",
-    "main.c5398ffd.css.map": "/electronic-diary/static/css/main.c5398ffd.css.map",
-    "main.d6733cef.js.map": "/electronic-diary/static/js/main.d6733cef.js.map",
+    "main.e0e8e905.css.map": "/electronic-diary/static/css/main.e0e8e905.css.map",
+    "main.d9ae5ef8.js.map": "/electronic-diary/static/js/main.d9ae5ef8.js.map",
     "453.138cdfb6.chunk.js.map": "/electronic-diary/static/js/453.138cdfb6.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c5398ffd.css",
-    "static/js/main.d6733cef.js"
+    "static/css/main.e0e8e905.css",
+    "static/js/main.d9ae5ef8.js"
   ]
 }
