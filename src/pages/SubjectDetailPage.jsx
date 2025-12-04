@@ -51,27 +51,22 @@ function SubjectDetailPage({ subjectData, onBack }) {
             setCalcResult("У вас вже є цей бал (або вищий)! 🎉");
             return;
         }
+        const approxTarget = target - 0.4;
+        const needed12 = Math.ceil((average - approxTarget) / (approxTarget-12));
 
-        // Математика:
-        // (Сума_поточних + X * 12) / (Кількість_поточних + X) = Ціль
-        // X = (Ціль * Кількість - Сума) / (12 - Ціль)
-
-        const numericGrades = subjectData.semester1
-            .filter(g => typeof g.grade === 'number')
-            .map(g => g.grade);
-
-        const currentSum = numericGrades.reduce((a, b) => a + b, 0);
-        const count = numericGrades.length;
-
-        const needed12 = Math.ceil((target * count - currentSum) / (12 - target));
-
-        const needed11 = Math.ceil((target * count - currentSum) / (11 - target));
+        let calcResult = "";
+        for (let i = 12; i >= target; i--) {
+            console.log(i);
+            calcResult += String(Math.ceil((average - approxTarget) / (approxTarget-i))) + " оцінок \"" + String(i) + "\"";
+            if (i !== target) {
+                calcResult += " АБО ";
+            }
+        }
 
         if (needed12 > 50 || needed12 < 0) {
             setCalcResult("На жаль, це математично майже неможливо в цьому семестрі 😢");
         } else {
-            setCalcResult(`Щоб мати ${target}, треба отримати приблизно: 
-         ${needed12} оцінок "12" АБО ${needed11} оцінок "11".`);
+            setCalcResult(`Щоб мати ${target}, треба отримати приблизно: `+calcResult+".");
         }
     };
 

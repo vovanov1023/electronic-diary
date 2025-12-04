@@ -506,6 +506,30 @@
     margin: 0;
 }
 
+.see-all-grades-btn {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    margin-top: -10px;
+    transition: background-color 0.2s;
+}
+
+.see-all-grades-btn:hover {
+    background-color: var(--secondary-container);
+}
+
+.see-all-grades-btn .material-symbols-outlined {
+    font-size: 18px;
+}
+
 /* ========== АДАПТИВ ========== */
 
 @media (max-width: 768px) {

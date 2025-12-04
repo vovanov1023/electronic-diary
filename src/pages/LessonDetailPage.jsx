@@ -2,16 +2,16 @@
 import React, { useState } from 'react';
 import './LessonDetailPage.css';
 import {getMaterialsForLesson, getCommentsForLesson} from '../data/lessonMaterials';
-import {getGradesForLesson} from "../data/gradesData";
+import {getGradeForLesson} from "../data/gradesData";
 
-function LessonDetailPage({ lesson, homework, date, onBack }) {
+function LessonDetailPage({ lesson, homework, date, onBack, onNavigateToSubject }) {
     const [homeworkText, setHomeworkText] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [newComment, setNewComment] = useState('');
 
     const materials = getMaterialsForLesson(lesson.id, date);
     const comments = getCommentsForLesson(lesson.id, date);
-    const grades = getGradesForLesson(lesson.subject);
+    const grade = getGradeForLesson(lesson.subject, date, lesson.id);
 
     // Іконки для типів матеріалів
     const getIconForType = (type) => {
@@ -100,9 +100,9 @@ function LessonDetailPage({ lesson, homework, date, onBack }) {
                                     rel="noopener noreferrer"
                                     className="material-item"
                                 >
-                  <span className="material-symbols-outlined material-icon">
-                    {material.icon || getIconForType(material.type)}
-                  </span>
+                                    <span className="material-symbols-outlined material-icon">
+                                      {material.icon || getIconForType(material.type)}
+                                    </span>
                                     <span className="material-title">{material.title}</span>
                                     <span className="material-symbols-outlined">open_in_new</span>
                                 </a>
@@ -123,9 +123,9 @@ function LessonDetailPage({ lesson, homework, date, onBack }) {
                             <div className="homework-header-detail">
                                 <h3 className="homework-title-detail">{homework.title}</h3>
                                 <div className={`homework-status ${homework.completed ? 'completed' : 'pending'}`}>
-                  <span className="material-symbols-outlined">
-                    {homework.completed ? 'check_circle' : 'pending'}
-                  </span>
+                                    <span className="material-symbols-outlined">
+                                      {homework.completed ? 'check_circle' : 'pending'}
+                                    </span>
                                     <span>{homework.completed ? 'Здано' : 'Не здано'}</span>
                                 </div>
                             </div>
@@ -167,16 +167,16 @@ function LessonDetailPage({ lesson, homework, date, onBack }) {
                     </section>
                 )}
 
-                {/* Оцінки */}
-                {
-                    grades.length > 0 && (
+                {/* Оцінка */}
+                 { grade != null && (
                     <section className="detail-section">
                         <h2 className="section-title">
                             <span className="material-symbols-outlined">grade</span>
-                            Оцінки
+                            Оцінка
                         </h2>
+                        <button className={"see-all-grades-btn"} onClick={() => onNavigateToSubject(lesson.subject)}>Всі оцінки</button>
                         <div className="grades-list">
-                            {grades.map((grade) => (
+                            {
                                 <div key={grade.id} className="grade-item">
                                     <div className="grade-info">
                                         <div className="grade-type">{grade.type}</div>
@@ -194,10 +194,11 @@ function LessonDetailPage({ lesson, homework, date, onBack }) {
                                         </div>
                                     )}
                                 </div>
-                            ))}
+                            }
                         </div>
                     </section>
-                )}
+                 )
+                }
 
                 {/* Коментарі */}
                 <section className="detail-section">

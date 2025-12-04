@@ -12,7 +12,7 @@ export const calculateAverage = (grades) => {
 export const gradesData = {
     "algebra": {
         subject: "Алгебра",
-        teacher: "Іваненко О.М.",
+        teacher: "Чистюк С.Д.",
         semester1: [
             { id: 1, type: "СР", grade: 1, max: 12, date: "2025-11-04", lessonId: "7" },
             { id: 2, type: "Поточна", grade: 12, max: 12, date: "2025-11-05", lessonId: "1" },
@@ -29,7 +29,7 @@ export const gradesData = {
     },
     "ukrainian_language": {
         subject: "Українська мова",
-        teacher: "Петренко Г.В.",
+        teacher: "Івахненко Г.М.",
         semester1: [
             { id: 6, type: "Диктант", grade: 8, max: 12, date: "2025-11-04", comment: "", lessonId: "5" }
         ],
@@ -41,7 +41,7 @@ export const gradesData = {
     },
     "physics": {
         subject: "Фізика",
-        teacher: "Бойко В.І.",
+        teacher: "Коваленко О.А.",
         semester1: [
             { id: 9, type: "ЛР", grade: 11, max: 12, date: "2025-11-03", comment: "", lessonId: "5" }
         ],
@@ -53,7 +53,7 @@ export const gradesData = {
     },
     "english_language": {
         subject: "Англійська мова",
-        teacher: "Ковальчук М.С.",
+        teacher: "Дорошенко Л.В.",
         semester1: [
             { id: 12, type: "Speaking", grade: 12, max: 12, date: "2025-11-03", comment: "", lessonId: "1"}
         ],
@@ -65,7 +65,7 @@ export const gradesData = {
     },
     "ukraine_history": {
         subject: "Історія України",
-        teacher: "Шевченко Т.П.",
+        teacher: "Міщенко С.О.",
         semester1: [
             { id: 15, type: "Відповідь", grade: 1, max: 12, date: "2025-09-16", comment: "", lessonId: "7" }
         ],

@@ -11,7 +11,7 @@ import DeadlinesWidget from './components/DeadlinesWidget';
 import RecentGradesWidget from './components/RecentGradesWidget';
 import './components/DashboardWidget.css';
 import { getMaterialsForLesson } from "./data/lessonMaterials";
-import { getGradeForLesson } from "./data/gradesData";
+import {getAllGrades, getGradeForLesson} from "./data/gradesData";
 import TeacherJournalPage from './pages/TeacherJournalPage';
 import TeacherLessonsPage from './pages/TeacherLessonsPage';
 import './pages/DiaryPage.css';
@@ -212,6 +212,19 @@ function App() {
         setDiaryDate(null);
     };
 
+    const handleNavigateToSubject = (subject) => {
+        const allSubjects = getAllGrades();
+        const subjectData = allSubjects.find(s => s.subject === subject);
+
+        if (subjectData) {
+            setSelectedSubject(subjectData);
+            setSelectedLesson(null);
+            setActiveTab('grades');
+        } else {
+            alert("оцінок з цього предмету нема");
+        }
+    };
+
     // Обробник для редагування уроку вчителем
     const handleLessonEdit = (lesson, dateString) => {
         // Знаходимо всю інфу про урок, перш ніж відкрити редактор
@@ -290,6 +303,7 @@ function App() {
                     lesson={selectedLesson}
                     homework={selectedLesson.homework}
                     date={selectedLesson.date}
+                    onNavigateToSubject={handleNavigateToSubject}
                     onBack={handleBackFromLesson}
                 />
             );

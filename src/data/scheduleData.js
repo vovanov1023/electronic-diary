@@ -13,30 +13,30 @@ export const bellSchedule = [
 
 const baseSchedule = {
     monday: [
-        { id: "1", subject: "Англійська мова", room: "107", teacher: "Ковальчук М.С." },
-        { id: "2", subject: "Англійська мова", room: "107", teacher: "Ковальчук М.С." },
-        { id: "3", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
-        { id: "4", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
-        { id: "5", subject: "Фізика", room: "102", teacher: "Бойко В.І." },
-        { id: "6", subject: "Фізика", room: "102", teacher: "Бойко В.І." }
+        { id: "1", subject: "Англійська мова", room: "107", teacher: "Дорошенко Л.В." },
+        { id: "2", subject: "Англійська мова", room: "107", teacher: "Дорошенко Л.В." },
+        { id: "3", subject: "Алгебра", room: "106", teacher: "Чистюк С.Д." },
+        { id: "4", subject: "Алгебра", room: "106", teacher: "Чистюк С.Д." },
+        { id: "5", subject: "Фізика", room: "102", teacher: "Коваленко О.А." },
+        { id: "6", subject: "Фізика", room: "102", teacher: "Коваленко О.А." }
     ],
     tuesday: [
         { id: "1", subject: "Фізична культура", room: "Спортзал", teacher: "Мельник С.А." },
         { id: "2", subject: "Фізична культура", room: "Спортзал", teacher: "Мельник С.А." },
-        { id: "3", subject: "Геометрія", room: "106", teacher: "Іваненко О.М." },
-        { id: "4", subject: "Геометрія", room: "106", teacher: "Іваненко О.М." },
-        { id: "5", subject: "Українська мова", room: "202", teacher: "Петренко Г.В." },
-        { id: "6", subject: "Українська мова", room: "202", teacher: "Петренко Г.В." },
-        { id: "7", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
-        { id: "8", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." }
+        { id: "3", subject: "Геометрія", room: "106", teacher: "Чистюк С.Д." },
+        { id: "4", subject: "Геометрія", room: "106", teacher: "Чистюк С.Д." },
+        { id: "5", subject: "Українська мова", room: "202", teacher: "Івахненко Г.М." },
+        { id: "6", subject: "Українська мова", room: "202", teacher: "Івахненко Г.М." },
+        { id: "7", subject: "Алгебра", room: "106", teacher: "Чистюк С.Д." },
+        { id: "8", subject: "Алгебра", room: "106", teacher: "Чистюк С.Д." }
     ],
     wednesday: [
-        { id: "1", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
-        { id: "2", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
+        { id: "1", subject: "Алгебра", room: "106", teacher: "Чистюк С.Д." },
+        { id: "2", subject: "Алгебра", room: "106", teacher: "Чистюк С.Д." },
         { id: "3", subject: "Інформатика", room: "101", teacher: "Комаров І.Ю." },
         { id: "4", subject: "Технології", room: "101", teacher: "Комаров І.Ю." },
-        { id: "5", subject: "Англійська мова", room: "202", teacher: "Ковальчук М.С." },
-        { id: "6", subject: "Англійська мова", room: "202", teacher: "Ковальчук М.С." },
+        { id: "5", subject: "Англійська мова", room: "202", teacher: "Дорошенко Л.В." },
+        { id: "6", subject: "Англійська мова", room: "202", teacher: "Дорошенко Л.В." },
         { id: "7", subject: "Захист України", room: "204", teacher: "Семенов С.С." },
         { id: "8", subject: "Захист України", room: "204", teacher: "Семенов С.С." }
     ],
@@ -45,20 +45,20 @@ const baseSchedule = {
         { id: "2", subject: "Хімія", room: null, teacher: "Малая Н.О." },
         { id: "3", subject: "Географія", room: null, teacher: "Рибачик Н.О." },
         { id: "4", subject: "Географія", room: null, teacher: "Рибачик Н.О." },
-        { id: "5", subject: "Всесвітня історія", room: null, teacher: "Симоненко С.В." },
-        { id: "6", subject: "Всесвітня історія", room: null, teacher: "Симоненко С.В." },
-        { id: "7", subject: "Біологія", room: null, teacher: "Корнова Т.В." },
-        { id: "8", subject: "Біологія", room: null, teacher: "Корнова Т.В." },
+        { id: "5", subject: "Всесвітня історія", room: null, teacher: "Нероденко В.В." },
+        { id: "6", subject: "Всесвітня історія", room: null, teacher: "Нероденко В.В." },
+        { id: "7", subject: "Біологія", room: null, teacher: "Корнова Н.О." },
+        { id: "8", subject: "Біологія", room: null, teacher: "Корнова Н.О." },
     ],
     friday: [
-        { id: "1", subject: "Геометрія", room: "104", teacher: "Іваненко О.М." },
-        { id: "2", subject: "Геометрія", room: "104", teacher: "Іваненко О.М." },
+        { id: "1", subject: "Геометрія", room: "104", teacher: "Чистюк С.Д." },
+        { id: "2", subject: "Геометрія", room: "104", teacher: "Чистюк С.Д." },
         { id: "3", subject: "Українська література", room: "106", teacher: "Корнова В.М." },
         { id: "4", subject: "Українська література", room: "106", teacher: "Корнова В.М." },
-        { id: "5", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
-        { id: "6", subject: "Алгебра", room: "106", teacher: "Іваненко О.М." },
-        { id: "7", subject: "Історія України", room: "104", teacher: "Шевченко Т.П." },
-        { id: "8", subject: "Історія України", room: "104", teacher: "Шевченко Т.П." }
+        { id: "5", subject: "Алгебра", room: "106", teacher: "Чистюк С.Д." },
+        { id: "6", subject: "Алгебра", room: "106", teacher: "Чистюк С.Д." },
+        { id: "7", subject: "Історія України", room: "104", teacher: "Міщенко С.О." },
+        { id: "8", subject: "Історія України", room: "104", teacher: "Міщенко С.О." }
     ]
 };
 
