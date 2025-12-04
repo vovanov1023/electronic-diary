@@ -18,7 +18,7 @@ const journalDatabase = {
         },
         // ... (інші учні)
         "s10": { // Наш "тестовий" учень
-            "2025-11-04": "10",
+            "2025-11-04": "11",
             "2025-11-05": "9"
         }
     }
@@ -29,6 +29,7 @@ export const getLessonDatesForSubject = (subjectId, classId) => {
     if (subjectId === 'algebra' && classId === '10a') {
         return [
             { date: "2025-11-03", type: "Урок" },
+            { date: "2025-11-04", type: "Урок" },
             { date: "2025-11-05", type: "Урок" },
             { date: "2025-11-07", type: "КР" }, // П'ятниця
             { date: "2025-11-10", type: "Урок" },

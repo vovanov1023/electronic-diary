@@ -14,9 +14,8 @@ export const gradesData = {
         subject: "Алгебра",
         teacher: "Чистюк С.Д.",
         semester1: [
-            { id: 1, type: "СР", grade: 1, max: 12, date: "2025-11-04", lessonId: "7" },
-            { id: 2, type: "Поточна", grade: 12, max: 12, date: "2025-11-05", lessonId: "1" },
-            { id: 3, type: "КР", grade: 1, max: 12, date: "2025-11-05", lessonId: "2" }
+            { id: 1, type: "СР", grade: 11, max: 12, date: "2025-11-04", lessonId: "7" },
+            { id: 3, type: "КР", grade: 9, max: 12, date: "2025-11-05", lessonId: "2" }
         ],
         semester1_absences: [
             { id: 'a1', date: '2025-09-18', },
@@ -67,7 +66,7 @@ export const gradesData = {
         subject: "Історія України",
         teacher: "Міщенко С.О.",
         semester1: [
-            { id: 15, type: "Відповідь", grade: 1, max: 12, date: "2025-09-16", comment: "", lessonId: "7" }
+            { id: 15, type: "Відповідь", grade: 9, max: 12, date: "2025-09-16", comment: "", lessonId: "7" }
         ],
         semester1_absences: [],
         semester1_final: 9,
